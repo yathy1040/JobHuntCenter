@@ -8,9 +8,11 @@ import MetricCard from "@/components/dashboard/metric-card";
 export default function Dashboard() {
     return (
         <div>
+
             <Navbar />
             <PageHeader />
             <p>Dashboard for Job Hunt</p>
+            <div className="flex min-h-screen bg-zinc-50 dark:bg-black">
             <Sidebar />
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {dashboardMetrics.map((metric: DashboardMetric) => (
@@ -18,6 +20,7 @@ export default function Dashboard() {
                         key = {metric.title}
                         metric={metric}/>
                 ))}
+            </div>
             </div>
         </div>
     );

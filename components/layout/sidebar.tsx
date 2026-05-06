@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Sidebar() {
     return (
-        <div className="flex min-h-screen bg-zinc-50 dark:bg-black">
+
             <aside className="h-screen w-64 shrink-0 bg-white border-r border-zinc-200 px-4 py-6 dark:bg-zinc-950 dark:border-zinc-800">
                 <h1 className="mb-8 text-xl font-bold text-zinc-900 dark:text-white">
                     Job Hunt Command Center
@@ -29,6 +29,5 @@ export default function Sidebar() {
                         href="/">Settings</Link>
                 </nav>
             </aside>
-        </div>
             )
             }
