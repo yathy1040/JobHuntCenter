@@ -4,6 +4,7 @@ import PageHeader from "@/components/dashboard/page-header";
 import {dashboardMetrics, applications} from "@/lib/data"
 import {DashboardMetric} from "@/lib/types";
 import MetricCard from "@/components/dashboard/metric-card";
+import ApplicationsTable from "@/components/dashboard/applications-table";
 
 export default function Dashboard() {
     return (
@@ -21,6 +22,9 @@ export default function Dashboard() {
                         metric={metric}/>
                 ))}
             </div>
+                <div className="mt-8">
+                    <ApplicationsTable applications={applications} />
+                </div>
             </div>
         </div>
     );
