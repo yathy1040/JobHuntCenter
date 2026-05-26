@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: job_hunt_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: job_hunt_command_center
+    ports:
+      - "5432:5432"
+    volumes:
+      - job_hunt_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  job_hunt_postgres_data:
