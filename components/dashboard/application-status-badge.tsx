@@ -1,13 +1,13 @@
-import type { ApplicationStatus } from "@/lib/types";
+import type { ApplicationStatusLabel } from "@/lib/types";
 
 type ApplicationStatusBadgeProps = {
-    status: ApplicationStatus;
+    status: ApplicationStatusLabel;
 };
 
 export default function ApplicationStatusBadge({
                                                    status,
                                                }: ApplicationStatusBadgeProps) {
-    const statusStyles: Record<ApplicationStatus, string> = {
+    const statusStyles: Record<ApplicationStatusLabel, string> = {
         Wishlist: "bg-zinc-100 text-zinc-700",
         Applied: "bg-blue-100 text-blue-700",
         Interview: "bg-amber-100 text-amber-700",

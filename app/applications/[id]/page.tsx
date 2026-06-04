@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
+import DeleteApplicationButton from '@/components/applications/delete-application-button'
 
 export default async function ApplicationDetailPage({
                                                         params,
@@ -39,6 +40,7 @@ export default async function ApplicationDetailPage({
                     >
                         Edit
                     </Link>
+                    <DeleteApplicationButton id={application.id} />
                 </div>
 
                 <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">

@@ -1,4 +1,5 @@
 import type { Application } from "@/lib/types";
+import Link from "next/link";
 import ApplicationStatusBadge from "./application-status-badge";
 
 type ApplicationsTableProps = {
@@ -28,6 +29,7 @@ export default function ApplicationsTable({
                         <th className="px-4 py-3 font-medium">Status</th>
                         <th className="px-4 py-3 font-medium">Date Applied</th>
                         <th className="px-4 py-3 font-medium">Next Action</th>
+                        <th className="px-4 py-3 font-medium">Link</th>
                     </tr>
                     </thead>
 
@@ -46,6 +48,7 @@ export default function ApplicationsTable({
                             </td>
                             <td className="px-4 py-4">{application.dateApplied}</td>
                             <td className="px-4 py-4">{application.nextAction}</td>
+                            <td className="px-4 py-4"><Link className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700" href={`/applications/${application.id}`} >View</Link></td>
                         </tr>
                     ))}
                     </tbody>

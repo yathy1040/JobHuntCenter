@@ -14,7 +14,7 @@ export default function Sidebar() {
                         href="/dashboard">Dashboard</Link>
                     <Link
                         className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow-md transition duration-150 ease-in-out"
-                        href="/">Applications</Link>
+                        href="/applications">Applications</Link>
                     <Link
                         className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 shadow-md transition duration-150 ease-in-out"
                         href="/">Companies</Link>
