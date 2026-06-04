@@ -1,5 +1,3 @@
-import Sidebar from "@/components/layout/sidebar";
-import Navbar from "@/components/layout/navbar";
 import PageHeader from "@/components/dashboard/page-header";
 import {ApplicationStatusLabel } from "@/lib/types";
 import ApplicationsTable from "@/components/dashboard/applications-table";
@@ -39,19 +37,11 @@ export default async function Dashboard() {
     }));
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-black">
-            <Navbar />
-
-            <div className="mx-auto flex max-w-7xl">
-                <Sidebar />
-
-                <main className="flex-1 p-6 lg:p-8">
-                    <PageHeader />
-                    <section className="mt-8">
-                    <ApplicationsTable applications={applications} />
-                </section>
-            </main>
-        </div>
-</div>
-);
+        <>
+            <PageHeader />
+            <section className="mt-8">
+                <ApplicationsTable applications={applications} />
+            </section>
+        </>
+    );
 }

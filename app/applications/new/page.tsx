@@ -5,8 +5,8 @@ import {createApplication} from "@/lib/actions/applications";
 
 export default async function AddApplication() {
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#dbeafe,_transparent_32%),linear-gradient(180deg,_#fafafa_0%,_#f4f4f5_100%)] px-6 py-10 text-zinc-900">
-      <div className="mx-auto max-w-5xl">
+    <div className="text-zinc-900">
+      <div className="max-w-5xl">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
@@ -64,6 +64,6 @@ export default async function AddApplication() {
           </aside>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

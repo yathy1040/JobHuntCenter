@@ -24,8 +24,7 @@ export default async function ApplicationDetailPage({
     }
 
     return (
-        <main className="min-h-screen bg-zinc-50 p-6">
-            <div className="mx-auto max-w-3xl">
+            <div className="max-w-3xl text-zinc-900">
                 <div className="mb-8 flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold text-zinc-900">
@@ -93,6 +92,5 @@ export default async function ApplicationDetailPage({
                     </dl>
                 </div>
             </div>
-        </main>
     );
 }

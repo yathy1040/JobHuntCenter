@@ -68,10 +68,10 @@ export default async function Dashboard() {
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
       <Navbar />
 
-      <div className="mx-auto flex max-w-7xl">
+      <div className="flex w-full">
         <Sidebar />
 
-        <main className="flex-1 p-6 lg:p-8">
+        <main className="min-w-0 flex-1 p-6 lg:p-8">
           <PageHeader />
 
           <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
