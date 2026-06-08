@@ -75,7 +75,7 @@ export default async function Applications({ searchParams }: PageProps) {
 
     return (
         <>
-            <PageHeader />
+            <PageHeader showBoardLink />
             <section className="mt-8">
                 <ApplicationsTable applications={applications} />
             </section>
