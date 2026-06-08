@@ -48,7 +48,8 @@ export default function ApplicationsTable({
                             </td>
                             <td className="px-4 py-4">{application.dateApplied}</td>
                             <td className="px-4 py-4">{application.nextAction}</td>
-                            <td className="px-4 py-4"><Link className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700" href={`/applications/${application.id}`} >View</Link></td>
+                            <td className="px-4 py-4"><Link className="mt-4 rounded-lg
+                            bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700" href={`/applications/${application.id}`} >View</Link></td>
                         </tr>
                     ))}
                     </tbody>

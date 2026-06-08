@@ -2,7 +2,20 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import {ApplicationStatusLabel, type Application} from "@/lib/types";
+import type {ApplicationStatus as PrismaApplicationStatus} from "@/app/generated/prisma/enums";
 
+function formatStatus(status: PrismaApplicationStatus):ApplicationStatusLabel {
+    const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
+        WISHLIST: "Wishlist",
+        APPLIED: "Applied",
+        INTERVIEW: "Interview",
+        OFFER: "Offer",
+        REJECTED: "Rejected",
+    };
+
+    return statusMap[status];
+}
 
 
 

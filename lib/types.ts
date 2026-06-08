@@ -42,3 +42,15 @@ export type ApplicationFormProps = {
     submitLabel: string;
     action: (formData: FormData) => Promise<void>;
 };
+
+export type Company = {
+    id: string;
+    name: string;
+    website?: string;
+    industry?: string;
+    location?: string;
+    notes?: string;
+    count?: number;
+
+
+}
