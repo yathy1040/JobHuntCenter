@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type {Company} from "@/lib/types";
-import ApplicationStatusBadge from "@/components/dashboard/application-status-badge";
 
 type CompaniesTableProps = {
     companies: Company[];
