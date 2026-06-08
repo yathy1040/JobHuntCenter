@@ -35,13 +35,13 @@ This project is being built as a portfolio-grade full-stack application to pract
 * Prisma migrations and seed data
 * Local PostgreSQL development using Docker
 * Prisma Studio support for database inspection
-
-### In Progress / Planned
-
 * Application search and filtering
 * Companies page
 * Company detail page
 * Board/Kanban-style application view
+
+### In Progress / Planned
+
 * Authentication
 * User-specific application tracking
 * Analytics dashboard
@@ -66,14 +66,14 @@ This project is currently in development.
 
 Current progress:
 
-* [x] Week 1: Frontend dashboard shell
-* [x] Week 2: PostgreSQL and Prisma integration
-* [x] Week 3: Application CRUD
-* [x] Week 4: Applications page started
-* [ ] Search and filtering
-* [ ] Companies page
-* [ ] Company detail page
-* [ ] Board view
+* [x] Frontend dashboard shell
+* [x] PostgreSQL and Prisma integration
+* [x] Application CRUD
+* [x] Applications page
+* [x] Search and filtering
+* [x] Companies page
+* [x] Company detail page
+* [x] Board view of applications
 * [ ] Authentication
 * [ ] Analytics
 * [ ] Reminder system
@@ -214,10 +214,12 @@ job-hunt-command-center/
 ├─ app/
 │  ├─ dashboard/
 │  ├─ applications/
+│  ├─ companies/
 │  └─ page.tsx
 ├─ components/
 │  ├─ dashboard/
 │  ├─ applications/
+│  ├─ companies/
 │  └─ layout/
 ├─ lib/
 │  ├─ actions/
@@ -260,10 +262,10 @@ This project helped me practice:
 * [x] Add edit application flow
 * [x] Add delete application flow
 * [x] Add dedicated applications page
-* [ ] Add search and filters
-* [ ] Add companies page
-* [ ] Add company detail page
-* [ ] Add board/Kanban view by status
+* [x] Add search and filters
+* [x] Add companies page
+* [x] Add company detail page
+* [x] Add board/Kanban view by status
 * [ ] Add authentication
 * [ ] Scope data to authenticated users
 * [ ] Add analytics dashboard
@@ -281,8 +283,6 @@ Potential future upgrades include:
 * Interview scheduling
 * Follow-up reminders
 * Application analytics
-* Status-based Kanban board
-* Search and filtering
 * CSV export
 * Deployment with a production PostgreSQL database
 
