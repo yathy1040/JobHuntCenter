@@ -2,24 +2,10 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import {ApplicationStatusLabel, type Application} from "@/lib/types";
-import type {ApplicationStatus as PrismaApplicationStatus} from "@/app/generated/prisma/enums";
-
-function formatStatus(status: PrismaApplicationStatus):ApplicationStatusLabel {
-    const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
-        WISHLIST: "Wishlist",
-        APPLIED: "Applied",
-        INTERVIEW: "Interview",
-        OFFER: "Offer",
-        REJECTED: "Rejected",
-    };
-
-    return statusMap[status];
-}
-
-
+import { requireUserId } from "@/lib/current-user";
 
 export async function createApplication(formData: FormData){
+    const userId = await requireUserId();
     const company = formData.get("company") as string;
     const role = formData.get("role") as string;
     const status = formData.get("status") as
@@ -39,10 +25,11 @@ export async function createApplication(formData: FormData){
     if (!status) {
         throw new Error(`Status name required`);
     }
-    const comp = await prisma.company.create({data: {name: company}});
+    const comp = await prisma.company.create({data: {name: company, userId}});
 
     await prisma.application.create({
         data: {
+            userId,
             companyId: comp.id,
             role,
             status,
@@ -60,6 +47,7 @@ export async function createApplication(formData: FormData){
 }
 
 export async function updateApplication(formData: FormData){
+    const userId = await requireUserId();
     const id = formData.get("id") as string;
     const company = formData.get("company") as string;
     const role = formData.get("role") as string;
@@ -83,15 +71,15 @@ export async function updateApplication(formData: FormData){
     }
 
     let comp = await prisma.company.findFirst({
-        where: { name: company },
+        where: { name: company, userId },
         orderBy: { id: "desc" },
     });
     if (!comp){
-        comp = await prisma.company.create({data: {name: company}});
+        comp = await prisma.company.create({data: {name: company, userId}});
     }
 
-    await prisma.application.update({
-        where: {id: id},
+    const result = await prisma.application.updateMany({
+        where: {id, userId},
         data: {
             companyId: comp.id,
             role,
@@ -104,6 +92,10 @@ export async function updateApplication(formData: FormData){
         }
     })
 
+    if (result.count === 0) {
+        throw new Error("Application not found");
+    }
+
     revalidatePath("/dashboard")
     revalidatePath("/applications")
     revalidatePath(`/applications/${id}`)
@@ -112,9 +104,12 @@ export async function updateApplication(formData: FormData){
 }
 
 export async function deleteApplication(id: string) {
-    await prisma.application.delete({
+    const userId = await requireUserId();
+
+    await prisma.application.deleteMany({
         where: {
             id,
+            userId,
         },
     });
 

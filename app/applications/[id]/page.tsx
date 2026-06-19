@@ -5,6 +5,7 @@ import DeleteApplicationButton from "@/components/applications/delete-applicatio
 import ApplicationStatusBadge from "@/components/dashboard/application-status-badge";
 import type { ApplicationStatus as PrismaApplicationStatus } from "@/app/generated/prisma/enums";
 import type { ApplicationStatusLabel } from "@/lib/types";
+import { requireUserId } from "@/lib/current-user";
 
 function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
@@ -35,11 +36,13 @@ export default async function ApplicationDetailPage({
 }: {
     params: Promise<{ id: string }>;
 }) {
+    const userId = await requireUserId();
     const { id } = await params;
 
-    const application = await prisma.application.findUnique({
+    const application = await prisma.application.findFirst({
         where: {
             id,
+            userId,
         },
         include: {
             company: true,

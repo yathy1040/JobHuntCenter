@@ -5,6 +5,7 @@ import { DashboardMetric, ApplicationStatusLabel } from "@/lib/types";
 import MetricCard from "@/components/dashboard/metric-card";
 import ApplicationsTable from "@/components/dashboard/applications-table";
 import prisma from "@/lib/prisma";
+import { requireUserId } from "@/lib/current-user";
 
 function formatStatus(status: string):ApplicationStatusLabel {
     const statusMap: Record<string, ApplicationStatusLabel> = {
@@ -18,8 +19,12 @@ function formatStatus(status: string):ApplicationStatusLabel {
     return statusMap[status] ?? status;
 }
 export default async function Dashboard() {
+    const userId = await requireUserId();
 
     const dbApplications = await prisma.application.findMany({
+        where: {
+            userId,
+        },
         include: {
             company: true,
         },

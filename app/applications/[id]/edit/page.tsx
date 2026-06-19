@@ -4,17 +4,20 @@ import prisma from "@/lib/prisma";
 import ApplicationForm from "@/components/application-form";
 import {updateApplication} from "@/lib/actions/applications";
 import {ApplicationFormValues} from "@/lib/types";
+import { requireUserId } from "@/lib/current-user";
 
 export default async function ApplicationDetailPage({
                                                         params,
                                                     }: {
     params: Promise<{ id: string }>;
 }) {
+    const userId = await requireUserId();
     const { id } = await params;
 
-    const application = await prisma.application.findUnique({
+    const application = await prisma.application.findFirst({
         where: {
             id,
+            userId,
         },
         include: {
             company: true,

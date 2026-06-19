@@ -1,5 +1,5 @@
 import "dotenv/config";
-import {Prisma, PrismaClient} from "../app/generated/prisma/client";
+import {PrismaClient} from "@/app/generated/prisma/client";
 import {PrismaPg} from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({
@@ -90,10 +90,29 @@ const companies = [
 async function main() {
     await prisma.application.deleteMany();
     await prisma.company.deleteMany();
+    await prisma.account.deleteMany();
+    await prisma.session.deleteMany();
+    await prisma.user.deleteMany();
+
+    const user = await prisma.user.create({
+        data: {
+            email: "demo@example.com",
+            name: "Demo User",
+        },
+    });
 
     for (const company of companies) {
         await prisma.company.create({
-            data: company,
+            data: {
+                ...company,
+                userId: user.id,
+                applications: {
+                    create: company.applications.create.map((application) => ({
+                        ...application,
+                        userId: user.id,
+                    })),
+                },
+            },
         });
     }
 

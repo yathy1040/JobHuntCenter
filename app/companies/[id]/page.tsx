@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/sidebar";
 import type { ApplicationStatus as PrismaApplicationStatus } from "@/app/generated/prisma/enums";
 import type { Application, ApplicationStatusLabel } from "@/lib/types";
+import { requireUserId } from "@/lib/current-user";
 
 function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
@@ -37,14 +38,19 @@ export default async function CompanyDetailPage({
 }: {
     params: Promise<{ id: string }>;
 }) {
+    const userId = await requireUserId();
     const { id } = await params;
 
-    const company = await prisma.company.findUnique({
+    const company = await prisma.company.findFirst({
         where: {
             id,
+            userId,
         },
         include: {
             applications: {
+                where: {
+                    userId,
+                },
                 orderBy: {
                     createdAt: "desc",
                 },

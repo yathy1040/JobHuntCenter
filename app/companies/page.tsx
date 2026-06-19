@@ -3,9 +3,15 @@ import Sidebar from "@/components/layout/sidebar";
 import prisma from "@/lib/prisma";
 import CompaniesTable from "@/components/companies/companies-table";
 import type { Company } from "@/lib/types";
+import { requireUserId } from "@/lib/current-user";
 
 export default async function Companies() {
+    const userId = await requireUserId();
+
     const dbCompanies = await prisma.company.findMany({
+    where: {
+        userId,
+    },
     include: {
         _count: {
             select: {applications: true}

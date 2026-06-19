@@ -5,6 +5,7 @@ import {ApplicationStatusLabel} from "@/lib/types";
 import prisma from "@/lib/prisma";
 import ApplicationBoardColumn from "@/components/applications/application-board-column";
 import Link from "next/link";
+import { requireUserId } from "@/lib/current-user";
 
 const statusColumns: Array<{
     label: ApplicationStatusLabel;
@@ -40,6 +41,7 @@ const statusColumns: Array<{
 
 
 export default async function ApplicationBoardPage() {
+    const userId = await requireUserId();
 
     function formatStatus(status: PrismaApplicationStatus):ApplicationStatusLabel {
         const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
@@ -55,6 +57,9 @@ export default async function ApplicationBoardPage() {
 
 
     const dbApplications = await prisma.application.findMany({
+        where: {
+            userId,
+        },
         include: {
             company: true,
         },

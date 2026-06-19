@@ -2,6 +2,7 @@ import PageHeader from "@/components/dashboard/page-header";
 import {ApplicationStatusLabel } from "@/lib/types";
 import ApplicationsTable from "@/components/dashboard/applications-table";
 import prisma from "@/lib/prisma";
+import { requireUserId } from "@/lib/current-user";
 import {
     ApplicationStatus as ApplicationStatusEnum,
     type ApplicationStatus as PrismaApplicationStatus,
@@ -38,12 +39,14 @@ interface PageProps {
 }
 
 export default async function Applications({ searchParams }: PageProps) {
+    const userId = await requireUserId();
 
     const params = await searchParams;
     const status = parseApplicationStatus(params.status);
     const search = typeof params.search === "string" ? params.search.trim() : "";
     const dbApplications = await prisma.application.findMany({
-            where: {...(status ? { status } : {}),
+            where: {userId,
+            ...(status ? { status } : {}),
             ...(search
                 ? {
                     role: {
