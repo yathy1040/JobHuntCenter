@@ -19,6 +19,16 @@ enum ApplicationStatus {
   REJECTED
 }
 
+enum InterviewStage {
+  RECRUITER_SCREEN
+  HIRING_MANAGER
+  TECHNICAL
+  BEHAVIOURAL
+  SYSTEM_DESIGN
+  FINAL
+  OTHER
+}
+
 model User {
   id            String        @id @default(cuid())
   name          String?
@@ -29,6 +39,8 @@ model User {
   sessions      Session[]
   companies     Company[]
   applications  Application[]
+  tasks         Task[]
+  interviews    Interview[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -105,6 +117,47 @@ model Application {
   dateApplied DateTime?
   nextAction  String?
   notes       String?
+  interviews  Interview[]
+  tasks       Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Interview {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  stage         InterviewStage
+  scheduledAt   DateTime
+  durationMinutes      Int?
+  notes         String?
+  format       String?
+  location     String?
+  meetingUrl   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id String @id @default(cuid())
+
+  applicationId String?
+  application   Application?  @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title      String
+  description String?
+  dueAt      DateTime
+  completed  String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
