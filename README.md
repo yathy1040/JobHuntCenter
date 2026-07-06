@@ -17,6 +17,7 @@ This project is being built as a portfolio-grade full-stack application to pract
 * **ORM:** Prisma
 * **Local Development:** Docker
 * **UI:** React components
+* **Authentication:** Auth.js
 
 ## Features
 
@@ -39,11 +40,11 @@ This project is being built as a portfolio-grade full-stack application to pract
 * Companies page
 * Company detail page
 * Board/Kanban-style application view
+* Authentication
+* User-specific application tracking
 
 ### In Progress / Planned
 
-* Authentication
-* User-specific application tracking
 * Analytics dashboard
 * Interview and task tracking
 * Reminder workflows
@@ -74,7 +75,7 @@ Current progress:
 * [x] Companies page
 * [x] Company detail page
 * [x] Board view of applications
-* [ ] Authentication
+* [x] Authentication
 * [ ] Analytics
 * [ ] Reminder system
 * [ ] Deployment
@@ -85,6 +86,11 @@ Current main models:
 
 * `Company`
 * `Application`
+* `User`
+* `Account`
+* `Interviews`
+* `Tasks`
+
 
 A company can have many applications, and each application belongs to one company.
 
@@ -112,6 +118,8 @@ npm install
 ### 3. Set up environment variables
 
 Create a `.env` file in the project root.
+
+Copy the `.env.example` file in the repo and just replace th variables with your own environment variable.s
 
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/job_hunt_command_center?schema=public"
@@ -201,11 +209,21 @@ Seed the database:
 npx prisma db seed
 ```
 
+Generate secret authentication code:
+
+```bash
+npx auth secret
+```
+
 ## Environment Variables
 
-| Variable       | Description                                 |
-| -------------- | ------------------------------------------- |
-| `DATABASE_URL` | PostgreSQL connection string used by Prisma |
+| Variable             | Description                                 |
+|----------------------|---------------------------------------------|
+| `DATABASE_URL`       | PostgreSQL connection string used by Prisma |
+| `AUTH_SECRET` | Secret used by Auth.js to sign and encrypt authentication data. Generate a strong random value and keep it private. |
+| `AUTH_GITHUB_ID` | GitHub OAuth app client ID used for GitHub sign-in. |
+| `AUTH_GITHUB_SECRET` | GitHub OAuth app client secret used for GitHub sign-in. Keep this private. |       |
+
 
 ## Folder Structure
 
@@ -266,8 +284,8 @@ This project helped me practice:
 * [x] Add companies page
 * [x] Add company detail page
 * [x] Add board/Kanban view by status
-* [ ] Add authentication
-* [ ] Scope data to authenticated users
+* [x] Add authentication
+* [x] Scope data to authenticated users
 * [ ] Add analytics dashboard
 * [ ] Add interview and task tracking
 * [ ] Add reminder workflows
@@ -277,8 +295,7 @@ This project helped me practice:
 
 Potential future upgrades include:
 
-* User authentication with Auth.js
-* User-specific application data
+
 * Resume and cover letter version tracking
 * Interview scheduling
 * Follow-up reminders

@@ -4,8 +4,9 @@ import prisma from "@/lib/prisma";
 import DeleteApplicationButton from "@/components/applications/delete-application-button";
 import ApplicationStatusBadge from "@/components/dashboard/application-status-badge";
 import type { ApplicationStatus as PrismaApplicationStatus } from "@/app/generated/prisma/enums";
-import type { ApplicationStatusLabel } from "@/lib/types";
+import type { ApplicationStatusLabel, Interview } from "@/lib/types";
 import { requireUserId } from "@/lib/current-user";
+import InterviewList from "@/components/interviews/interview-list";
 
 function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
@@ -24,6 +25,16 @@ function formatDate(date: Date) {
         month: "short",
         day: "numeric",
         year: "numeric",
+    }).format(date);
+}
+
+function formatInterviewDate(date: Date) {
+    return new Intl.DateTimeFormat("en", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
     }).format(date);
 }
 
@@ -57,6 +68,43 @@ export default async function ApplicationDetailPage({
     const dateApplied = application.dateApplied
         ? formatDate(application.dateApplied)
         : "Not applied yet";
+
+    const dbInterviews = await prisma.interview.findMany({
+        where: {
+            applicationId: id,
+            userId,
+        },
+        orderBy: {
+            scheduledAt: "asc",
+        },
+    });
+
+    const interviews: Interview[] = dbInterviews.map((interview) => {
+        const displayInterview: Interview = {
+            id: interview.id,
+            stage: interview.stage,
+            scheduledAt: formatInterviewDate(interview.scheduledAt),
+            format: interview.format ?? "Format not set",
+        };
+
+        if (interview.durationMinutes !== null) {
+            displayInterview.durationMinutes = interview.durationMinutes;
+        }
+
+        if (interview.location) {
+            displayInterview.location = interview.location;
+        }
+
+        if (interview.meetingUrl) {
+            displayInterview.meetingUrl = interview.meetingUrl;
+        }
+
+        if (interview.notes) {
+            displayInterview.notes = interview.notes;
+        }
+
+        return displayInterview;
+    });
 
     return (
         <div className="mx-auto max-w-6xl space-y-8 text-zinc-900">
@@ -222,6 +270,34 @@ export default async function ApplicationDetailPage({
                             {application.notes ?? "No notes yet."}
                         </p>
                     </div>
+                </div>
+            </section>
+
+            <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-600">
+                            Interviews
+                        </p>
+                        <h2 className="mt-2 text-xl font-black text-zinc-950">
+                            Interviews
+                        </h2>
+                    </div>
+                    <Link
+                        href={`/applications/${application.id}/interviews/new`}
+                        className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-blue-700"
+                    >
+                        Create Interview
+                    </Link>
+                </div>
+
+                <div className="mt-6">
+                    <InterviewList
+                        interviews={interviews}
+                        description="Scheduled interviews for this application."
+                        label="Interview Schedule"
+                        tone="border-blue-100 bg-blue-50 text-blue-700"
+                    />
                 </div>
             </section>
         </div>

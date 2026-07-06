@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ApplicationForm from "@/components/application-form";
+import ApplicationForm from "@/components/applications/application-form";
 import {createApplication} from "@/lib/actions/applications";
 
 

@@ -31,7 +31,7 @@ export default function ApplicationForm(props: ApplicationFormProps) {
                         Company Name
                     </label>
                     <input
-                        type="text"
+                        type="text" 
                         id="company"
                         name="company"
                         placeholder="Acme Corp"

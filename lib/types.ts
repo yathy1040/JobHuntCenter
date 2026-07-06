@@ -51,6 +51,53 @@ export type Company = {
     location?: string;
     notes?: string;
     count?: number;
-
-
 }
+
+export type Interview = {
+    id: string;
+    stage: string;
+    scheduledAt: string;
+    durationMinutes?: number;
+    format: string;
+    location?: string;
+    meetingUrl?: string;
+    notes?: string;
+}
+
+export type InterviewFormValues = {
+    id?: string;
+    stage: string;
+    scheduledAt: string;
+    durationMinutes: number;
+    format: string;
+    location: string;
+    url: string;
+    notes: string;
+
+};
+
+export type InterviewFormProps = {
+    mode: "create" | "edit";
+    applicationId: string;
+    initialData?: InterviewFormValues;
+    action: (formData: FormData) => Promise<void>;
+};
+
+export type TaskFormProps = {
+    mode: "create" | "edit";
+    initialData?: TaskFormValues;
+    submitLabel: string;
+    action: (formData: FormData) => Promise<void>;
+};
+
+export type TaskFormValues = {
+    id?: string;
+    stage: string;
+    scheduledAt: string;
+    durationMinutes: number;
+    format: string;
+    location: string;
+    url: string;
+    notes: string;
+
+};
