@@ -88,8 +88,8 @@ Current main models:
 * `Application`
 * `User`
 * `Account`
-* `Interviews`
-* `Tasks`
+* `Interview`
+* `Task`
 
 
 A company can have many applications, and each application belongs to one company.
@@ -97,7 +97,7 @@ A company can have many applications, and each application belongs to one compan
 Current relationship:
 
 ```txt
-Company 1 ──── * Application
+Company 1 ---- * Application
 ```
 
 ## Getting Started
@@ -119,19 +119,7 @@ npm install
 
 Create a `.env` file in the project root.
 
-Copy the `.env.example` file in the repo and just replace th variables with your own environment variable.s
-
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/job_hunt_command_center?schema=public"
-```
-
-Do not commit your real `.env` file.
-
-A safe `.env.example` file can be included:
-
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/job_hunt_command_center?schema=public"
-```
+Copy `.env.example` to `.env`, then replace the placeholder values with your own local environment values.
 
 ### 4. Start PostgreSQL with Docker
 
@@ -222,34 +210,38 @@ npx auth secret
 | `DATABASE_URL`       | PostgreSQL connection string used by Prisma |
 | `AUTH_SECRET` | Secret used by Auth.js to sign and encrypt authentication data. Generate a strong random value and keep it private. |
 | `AUTH_GITHUB_ID` | GitHub OAuth app client ID used for GitHub sign-in. |
-| `AUTH_GITHUB_SECRET` | GitHub OAuth app client secret used for GitHub sign-in. Keep this private. |       |
-
-
+| `AUTH_GITHUB_SECRET` | GitHub OAuth app client secret used for GitHub sign-in. Keep this private. |
 ## Folder Structure
 
 ```txt
 job-hunt-command-center/
-├─ app/
-│  ├─ dashboard/
-│  ├─ applications/
-│  ├─ companies/
-│  └─ page.tsx
-├─ components/
-│  ├─ dashboard/
-│  ├─ applications/
-│  ├─ companies/
-│  └─ layout/
-├─ lib/
-│  ├─ actions/
-│  ├─ prisma.ts
-│  └─ types.ts
-├─ prisma/
-│  ├─ schema.prisma
-│  └─ seed.ts
-├─ public/
-├─ docker-compose.yml
-├─ package.json
-└─ README.md
+|-- app/
+|   |-- dashboard/
+|   |-- applications/
+|   |-- companies/
+|   |-- interviews/
+|   |-- tasks
+|   `-- page.tsx
+|-- components/
+|   |-- dashboard/
+|   |-- applications/
+|   |-- companies/
+|   |-- interviews/
+|   |-- tasks/
+|   `-- layout/
+|-- lib/
+|   |-- actions/
+|   |-- current-user.ts
+|   |-- data.ts
+|   |-- prisma.ts
+|   `-- types.ts
+|-- prisma/
+|   |-- schema.prisma
+|   `-- seed.ts
+|-- public/
+|-- docker-compose.yml
+|-- package.json
+`-- README.md
 ```
 
 ## What I Learned
