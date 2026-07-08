@@ -42,11 +42,14 @@ This project is being built as a portfolio-grade full-stack application to pract
 * Board/Kanban-style application view
 * Authentication
 * User-specific application tracking
+* Interview scheduling for job applications
+* Interview stage, format, date/time, and notes tracking
 
 ### In Progress / Planned
 
+* Task management
+* Dashboard widgets for upcoming interviews and due tasks
 * Analytics dashboard
-* Interview and task tracking
 * Reminder workflows
 * Deployment
 
@@ -76,6 +79,10 @@ Current progress:
 * [x] Company detail page
 * [x] Board view of applications
 * [x] Authentication
+* [x] User-specific application tracking
+* [x] Interview tracking
+* [ ] Task management
+* [ ] Dashboard interview/task widgets
 * [ ] Analytics
 * [ ] Reminder system
 * [ ] Deployment
@@ -84,10 +91,12 @@ Current progress:
 
 Current main models:
 
-* `Company`
-* `Application`
 * `User`
 * `Account`
+* `Session`
+* `VerificationToken`
+* `Company`
+* `Application`
 * `Interview`
 * `Task`
 
@@ -98,6 +107,18 @@ Current relationship:
 
 ```txt
 Company 1 ---- * Application
+```
+
+Additional relationships:
+
+```txt
+User 1 -------- * Company
+User 1 -------- * Application
+User 1 -------- * Interview
+User 1 -------- * Task
+
+Application 1 -- * Interview
+Application 1 -- * Task
 ```
 
 ## Getting Started
@@ -220,7 +241,7 @@ job-hunt-command-center/
 |   |-- applications/
 |   |-- companies/
 |   |-- interviews/
-|   |-- tasks
+|   |-- tasks/
 |   `-- page.tsx
 |-- components/
 |   |-- dashboard/
@@ -258,6 +279,10 @@ This project helped me practice:
 * Managing local PostgreSQL development with Docker
 * Using Prisma migrations and seed data
 * Debugging TypeScript errors between UI types and database types
+* Designing optional relationships in Prisma for tasks that may or may not belong to an application
+* Building user-owned interview and task workflows
+* Modeling workflow data such as interview stages, task due dates, and completion state
+* Extending an existing full-stack app without breaking authentication or authorization rules
 
 ## Roadmap
 
@@ -279,7 +304,11 @@ This project helped me practice:
 * [x] Add authentication
 * [x] Scope data to authenticated users
 * [ ] Add analytics dashboard
-* [ ] Add interview and task tracking
+* [x] Add interview schema and application interview tracking
+* [ ] Add task schema and task management page
+* [ ] Add task completion workflow
+* [ ] Add upcoming interviews to dashboard
+* [ ] Add due tasks to dashboard
 * [ ] Add reminder workflows
 * [ ] Deploy application
 
@@ -297,8 +326,7 @@ Potential future upgrades include:
 
 ## Resume Summary
 
-Job Hunt Command Center is a full-stack job application tracking platform built with Next.js, TypeScript, PostgreSQL, Prisma, Tailwind CSS, and Docker. The project includes a dashboard, application CRUD workflows, relational database modeling, reusable React components, and local containerized database development.
-
+Job Hunt Command Center is a full-stack job application tracking platform built with Next.js, TypeScript, PostgreSQL, Prisma, Tailwind CSS, Docker, and Auth.js. The project includes GitHub OAuth authentication, user-scoped application tracking, company management, application CRUD workflows, board views, relational database modeling, reusable React components, and local containerized database development. Interview and task management workflows are currently being added to support follow-ups, scheduling, and job-search planning.
 ## License
 
 MIT
