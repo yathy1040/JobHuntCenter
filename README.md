@@ -44,12 +44,12 @@ This project is being built as a portfolio-grade full-stack application to pract
 * User-specific application tracking
 * Interview scheduling for job applications
 * Interview stage, format, date/time, and notes tracking
-
-### In Progress / Planned
-
 * Task management
 * Dashboard widgets for upcoming interviews and due tasks
 * Analytics dashboard
+
+### In Progress / Planned
+
 * Reminder workflows
 * Deployment
 
@@ -81,9 +81,9 @@ Current progress:
 * [x] Authentication
 * [x] User-specific application tracking
 * [x] Interview tracking
-* [ ] Task management
-* [ ] Dashboard interview/task widgets
-* [ ] Analytics
+* [x] Task management
+* [x] Dashboard interview/task widgets
+* [x] Analytics
 * [ ] Reminder system
 * [ ] Deployment
 
@@ -303,12 +303,12 @@ This project helped me practice:
 * [x] Add board/Kanban view by status
 * [x] Add authentication
 * [x] Scope data to authenticated users
-* [ ] Add analytics dashboard
+* [x] Add analytics dashboard
 * [x] Add interview schema and application interview tracking
-* [ ] Add task schema and task management page
-* [ ] Add task completion workflow
-* [ ] Add upcoming interviews to dashboard
-* [ ] Add due tasks to dashboard
+* [x] Add task schema and task management page
+* [x] Add task completion workflow
+* [x] Add upcoming interviews to dashboard
+* [x] Add due tasks to dashboard
 * [ ] Add reminder workflows
 * [ ] Deploy application
 
