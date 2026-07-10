@@ -19,16 +19,6 @@ function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     return statusMap[status];
 }
 
-function formatInterviewDate(date: Date) {
-    return new Intl.DateTimeFormat("en", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        timeZone: "UTC",
-    }).format(date);
-}
-
 export default async function InterviewsPage() {
     const userId = await requireUserId();
 
@@ -77,7 +67,7 @@ export default async function InterviewsPage() {
                         const displayInterview: Interview = {
                             id: interview.id,
                             stage: interview.stage,
-                            scheduledAt: formatInterviewDate(interview.scheduledAt),
+                            scheduledAt: interview.scheduledAt,
                             format: interview.format ?? "Format not set",
                         };
 

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import InterviewForm from "@/components/interviews/interview-form";
 import { updateInterview } from "@/lib/actions/interviews";
 import { requireUserId } from "@/lib/current-user";
+import { formatDateTimeInputValue } from "@/lib/date-format";
 import prisma from "@/lib/prisma";
 import type { InterviewFormValues } from "@/lib/types";
 
@@ -36,9 +37,7 @@ export default async function EditInterview({
     const initialData: InterviewFormValues = {
         id: interview.id,
         stage: interview.stage,
-        scheduledAt: interview.scheduledAt
-            ? interview.scheduledAt.toISOString().split("T")[0]
-            : "",
+        scheduledAt: formatDateTimeInputValue(interview.scheduledAt),
         durationMinutes: interview.durationMinutes ?? 0,
         format: interview.format ?? "",
         location: interview.location ?? "",

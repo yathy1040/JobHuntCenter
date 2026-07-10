@@ -53,7 +53,7 @@ export default function InterviewForm(props: InterviewFormProps) {
                 Scheduled At
             </label>
             <input
-                type="date"
+                type="datetime-local"
                 id="scheduledAt"
                 name="scheduledAt"
                 defaultValue={props.initialData?.scheduledAt ?? ""}

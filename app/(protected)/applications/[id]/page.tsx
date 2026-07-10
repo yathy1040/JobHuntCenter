@@ -7,6 +7,7 @@ import type { ApplicationStatus as PrismaApplicationStatus } from "@/app/generat
 import type { ApplicationStatusLabel, Interview } from "@/lib/types";
 import { requireUserId } from "@/lib/current-user";
 import InterviewList from "@/components/interviews/interview-list";
+import { formatDateOnly } from "@/lib/date-format";
 
 function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
@@ -18,24 +19,6 @@ function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     };
 
     return statusMap[status];
-}
-
-function formatDate(date: Date) {
-    return new Intl.DateTimeFormat("en", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    }).format(date);
-}
-
-function formatInterviewDate(date: Date) {
-    return new Intl.DateTimeFormat("en", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        timeZone: "UTC",
-    }).format(date);
 }
 
 function getExternalUrl(url: string) {
@@ -66,7 +49,7 @@ export default async function ApplicationDetailPage({
 
     const status = formatStatus(application.status);
     const dateApplied = application.dateApplied
-        ? formatDate(application.dateApplied)
+        ? formatDateOnly(application.dateApplied)
         : "Not applied yet";
 
     const dbInterviews = await prisma.interview.findMany({
@@ -83,7 +66,7 @@ export default async function ApplicationDetailPage({
         const displayInterview: Interview = {
             id: interview.id,
             stage: interview.stage,
-            scheduledAt: formatInterviewDate(interview.scheduledAt),
+            scheduledAt: interview.scheduledAt,
             format: interview.format ?? "Format not set",
         };
 
@@ -117,6 +100,12 @@ export default async function ApplicationDetailPage({
                 </Link>
 
                 <div className="flex flex-wrap items-center gap-3">
+                    <Link
+                        href={`/tasks/new?applicationId=${application.id}`}
+                        className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-blue-700"
+                    >
+                        Add task
+                    </Link>
                     <Link
                         href={`/applications/${application.id}/edit`}
                         className="inline-flex items-center justify-center rounded-xl bg-zinc-950 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-800"
@@ -200,7 +189,7 @@ export default async function ApplicationDetailPage({
                         <DetailCard label="Applied" value={dateApplied} />
                         <DetailCard
                             label="Created"
-                            value={formatDate(application.createdAt)}
+                            value={formatDateOnly(application.createdAt)}
                         />
                     </div>
                 </div>
@@ -248,7 +237,7 @@ export default async function ApplicationDetailPage({
                         </h2>
                     </div>
                     <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-600">
-                        Updated {formatDate(application.updatedAt)}
+                        Updated {formatDateOnly(application.updatedAt)}
                     </span>
                 </div>
 

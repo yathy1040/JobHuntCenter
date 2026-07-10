@@ -7,6 +7,7 @@ import {
     ApplicationStatus as ApplicationStatusEnum,
     type ApplicationStatus as PrismaApplicationStatus,
 } from "@/app/generated/prisma/enums";
+import { formatDateOnly } from "@/lib/date-format";
 
 function formatStatus(status: PrismaApplicationStatus):ApplicationStatusLabel {
     const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
@@ -70,7 +71,7 @@ export default async function Applications({ searchParams }: PageProps) {
             role: application.role,
             status: formatStatus(application.status),
             dateApplied: application.dateApplied
-                ? application.dateApplied.toISOString().split("T")[0]
+                ? formatDateOnly(application.dateApplied)
                 : "Not applied yet",
             nextAction: application.nextAction ?? "No next action",
         }));

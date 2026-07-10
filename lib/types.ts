@@ -56,7 +56,7 @@ export type Company = {
 export type Interview = {
     id: string;
     stage: string;
-    scheduledAt: string;
+    scheduledAt: Date;
     durationMinutes?: number;
     format: string;
     location?: string;
@@ -83,21 +83,43 @@ export type InterviewFormProps = {
     action: (formData: FormData) => Promise<void>;
 };
 
+export type ApplicationOption = {
+    id: string;
+    companyName: string;
+    role: string;
+}
+
 export type TaskFormProps = {
+    applications: ApplicationOption[];
     mode: "create" | "edit";
     initialData?: TaskFormValues;
     submitLabel: string;
     action: (formData: FormData) => Promise<void>;
+    selectedApplicationId?: string;
+    onApplicationChange?: (applicationId: string) => void;
 };
 
 export type TaskFormValues = {
     id?: string;
-    stage: string;
-    scheduledAt: string;
-    durationMinutes: number;
-    format: string;
-    location: string;
-    url: string;
-    notes: string;
+    applicationId?: string;
+    title: string;
+    description: string;
+    dueAt: string;
+    completed: boolean;
 
+};
+
+export type Task = {
+    id: string;
+    applicationId?: string;
+    applicationLabel?: string;
+    title: string;
+    description?: string;
+    dueAt?: Date;
+    completed: boolean;
+}
+
+export type Metric= {
+    title: string;
+    value: number;
 };

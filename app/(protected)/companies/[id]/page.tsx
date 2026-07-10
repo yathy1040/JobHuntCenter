@@ -8,6 +8,7 @@ import Sidebar from "@/components/layout/sidebar";
 import type { ApplicationStatus as PrismaApplicationStatus } from "@/app/generated/prisma/enums";
 import type { Application, ApplicationStatusLabel } from "@/lib/types";
 import { requireUserId } from "@/lib/current-user";
+import { formatDateOnly } from "@/lib/date-format";
 
 function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
@@ -19,14 +20,6 @@ function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
     };
 
     return statusMap[status];
-}
-
-function formatDate(date: Date) {
-    return new Intl.DateTimeFormat("en", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    }).format(date);
 }
 
 function getExternalUrl(url: string) {
@@ -68,7 +61,7 @@ export default async function CompanyDetailPage({
         role: application.role,
         status: formatStatus(application.status),
         dateApplied: application.dateApplied
-            ? application.dateApplied.toISOString().split("T")[0]
+            ? formatDateOnly(application.dateApplied)
             : "Not applied yet",
         nextAction: application.nextAction ?? "No next action",
     }));
@@ -126,7 +119,7 @@ export default async function CompanyDetailPage({
                                     label="Latest"
                                     value={
                                         latestApplication
-                                            ? formatDate(latestApplication.createdAt)
+                                            ? formatDateOnly(latestApplication.createdAt)
                                             : "None"
                                     }
                                     detail="Most recent activity"

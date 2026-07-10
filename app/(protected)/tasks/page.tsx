@@ -1,9 +1,67 @@
 
 import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/sidebar";
+import TaskList from "@/components/tasks/task-list";
+import prisma from "@/lib/prisma";
+import { requireUserId } from "@/lib/current-user";
+
+const statusColumns: Array<{
+    label: string;
+    description: string;
+    tone: string;
+    completed: boolean;
+}> = [
+    {
+        label: "Completed",
+        description: "Completed Tasks",
+        tone: "border-slate-200 bg-slate-50/80 text-slate-700",
+        completed: true,
+    },
+    {
+        label: "Incomplete",
+        description: "Incomplete Tasks.",
+        tone: "border-sky-200 bg-sky-50/80 text-sky-700",
+        completed: false,
+    },
+];
 
 
 export default async function Tasks() {
+    const userId = await requireUserId();
+    const dbTasks = await prisma.task.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            application: {
+                include: {
+                    company: true,
+                },
+            },
+        },
+        orderBy: {
+            dueAt: "asc",
+        },
+    });
+
+    const tasks = dbTasks.map((task) => ({
+        id: task.id,
+        applicationId: task.applicationId ?? undefined,
+        applicationLabel: task.application
+            ? `${task.application.company.name} - ${task.application.role}`
+            : undefined,
+        title: task.title,
+        description: task.description ?? undefined,
+        dueAt: task.dueAt ?? undefined,
+        completed: task.completed,
+    }));
+
+    const columns = statusColumns.map((column) => ({
+        ...column,
+        tasks: tasks.filter((task) => task.completed === column.completed),
+    }));
+
+
     return (
         <div className="min-h-screen bg-[radial-gradient(circle_at_8%_10%,rgba(20,184,166,0.20),transparent_28%),radial-gradient(circle_at_88%_0%,rgba(251,146,60,0.18),transparent_26%),linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-zinc-950">
             <Navbar />
@@ -36,8 +94,16 @@ export default async function Tasks() {
                             </div>
                         </section>
 
-                        <section className="grid gap-4 sm:grid-cols-3">
-
+                        <section className="grid gap-4 sm:grid-cols-2">
+                            {columns.map((column) => (
+                                <TaskList
+                                    key={column.label}
+                                    tasks={column.tasks}
+                                    description={column.description}
+                                    label={column.label}
+                                    tone={column.tone}
+                                />
+                            ))}
                         </section>
 
                     </div>

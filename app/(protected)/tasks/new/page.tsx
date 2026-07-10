@@ -1,68 +1,84 @@
 import Link from "next/link";
-import ApplicationForm from "@/components/applications/application-form";
-import {createApplication} from "@/lib/actions/applications";
+import Navbar from "@/components/layout/navbar";
+import Sidebar from "@/components/layout/sidebar";
+import TaskCreatePanel from "@/components/tasks/task-create-panel";
+import { createTask } from "@/lib/actions/tasks";
+import prisma from "@/lib/prisma";
+import { requireUserId } from "@/lib/current-user";
 
 
-export default async function AddTask() {
+export default async function AddTask({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+    const userId = await requireUserId();
+    const params = await searchParams;
+    const requestedApplicationIdValue = params.applicationId ?? params.applicationid;
+    const requestedApplicationId =
+        typeof requestedApplicationIdValue === "string"
+            ? requestedApplicationIdValue
+            : requestedApplicationIdValue?.[0];
+
+
+    const dbApplications = await prisma.application.findMany({
+        where: {
+            userId,
+            ...(requestedApplicationId ? { id: requestedApplicationId } : {}),
+        },
+        include: {
+            company: true,
+        },
+    });
+
+    const applicationOptions = dbApplications.map((application) => ({
+        id: application.id,
+        companyName: application.company.name,
+        role: application.role,
+    }));
+    const initialData =
+        requestedApplicationId && applicationOptions.length === 1
+            ? {
+                applicationId: applicationOptions[0].id,
+                title: "",
+                description: "",
+                dueAt: "",
+                completed: false,
+            }
+            : undefined;
+
     return (
-        <div className="text-zinc-900">
-            <div className="max-w-5xl">
-                <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
-                            Tasks
-                        </p>
-                        <h1 className="mt-2 text-4xl font-bold tracking-tight text-zinc-950">
-                            Add Task
-                        </h1>
-                        <p className="mt-3 max-w-2xl text-base text-zinc-600">
-                            Capture the key details for a task so you know what you need to do in general or for a
-                            specific application.
-                        </p>
+        <div className="min-h-screen bg-[radial-gradient(circle_at_8%_10%,rgba(20,184,166,0.18),transparent_28%),radial-gradient(circle_at_88%_0%,rgba(37,99,235,0.16),transparent_26%),linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-zinc-950">
+            <Navbar />
+
+            <div className="flex w-full">
+                <Sidebar />
+
+                <main className="min-w-0 flex-1 p-6 lg:p-8">
+                    <div className="mx-auto max-w-6xl space-y-6">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                            <Link
+                                href="/tasks"
+                                className="inline-flex items-center justify-center rounded-full border border-zinc-200 bg-white/85 px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-700"
+                            >
+                                Back to tasks
+                            </Link>
+
+                            <Link
+                                href="/dashboard"
+                                className="inline-flex items-center justify-center rounded-xl bg-zinc-950 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-zinc-800"
+                            >
+                                Dashboard
+                            </Link>
+                        </div>
+
+                        <TaskCreatePanel
+                            applications={applicationOptions}
+                            initialData={initialData}
+                            action={createTask}
+                        />
                     </div>
-
-
-                    <Link
-                        href="/dashboard"
-                        className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50"
-                    >
-                        Back to dashboard
-                    </Link>
-                </div>
-
-                <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-                    <ApplicationForm mode="create" action={createApplication} submitLabel="Create Application" />
-
-                    <aside className="rounded-3xl border border-blue-100 bg-blue-50/90 p-6 shadow-sm">
-                        <h2 className="text-lg font-semibold text-blue-950">
-                            Tracking checklist
-                        </h2>
-                        <p className="mt-2 text-sm text-blue-800/80">
-                            A complete application entry gives you better dashboard metrics and
-                            clearer next actions.
-                        </p>
-                        <ul className="mt-6 space-y-4 text-sm text-blue-950">
-                            <li className="flex gap-3">
-                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-                  1
-                </span>
-                                Add the company and exact role title from the posting.
-                            </li>
-                            <li className="flex gap-3">
-                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-                  2
-                </span>
-                                Set a pipeline status so the dashboard summary stays accurate.
-                            </li>
-                            <li className="flex gap-3">
-                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-                  3
-                </span>
-                                Write the next action before you move on to another role.
-                            </li>
-                        </ul>
-                    </aside>
-                </div>
+                </main>
             </div>
         </div>
     );

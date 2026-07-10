@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import type { Interview } from "@/lib/types";
+import { formatFriendlyDateTime } from "@/lib/date-format";
 
 type InterviewCardProps = {
     interview: Interview;
@@ -19,7 +20,7 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
         interview.durationMinutes
             ? `${interview.durationMinutes} min`
             : "Duration not set",
-        interview.format,
+        interview.format || "Format not set",
         interview.location,
     ].filter(Boolean);
 
@@ -31,7 +32,7 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
                         {formatStage(interview.stage)}
                     </p>
                     <h3 className="mt-1 text-base font-bold leading-6 text-zinc-950">
-                        {interview.scheduledAt}
+                        {formatFriendlyDateTime(interview.scheduledAt)}
                     </h3>
                     {details.length > 0 ? (
                         <p className="mt-2 text-sm leading-5 text-zinc-600">
@@ -64,7 +65,11 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
                     >
                         Open meeting
                     </a>
-                ) : null}
+                ) : (
+                    <span className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-semibold text-zinc-500">
+                        No meeting URL
+                    </span>
+                )}
             </div>
         </article>
     );

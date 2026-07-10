@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma";
 import ApplicationBoardColumn from "@/components/applications/application-board-column";
 import Link from "next/link";
 import { requireUserId } from "@/lib/current-user";
+import { formatDateOnly } from "@/lib/date-format";
 
 const statusColumns: Array<{
     label: ApplicationStatusLabel;
@@ -74,7 +75,7 @@ export default async function ApplicationBoardPage() {
         role: application.role,
         status: formatStatus(application.status),
         dateApplied: application.dateApplied
-            ? application.dateApplied.toISOString().split("T")[0]
+            ? formatDateOnly(application.dateApplied)
             : "Not applied yet",
         nextAction: application.nextAction ?? "No next action",
     }));
