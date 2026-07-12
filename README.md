@@ -18,6 +18,7 @@ This project is being built as a portfolio-grade full-stack application to pract
 * **Local Development:** Docker
 * **UI:** React components
 * **Authentication:** Auth.js
+* **Testing (to be implemented):** Vitest, Playwright
 
 ## Features
 
@@ -50,7 +51,7 @@ This project is being built as a portfolio-grade full-stack application to pract
 
 ### In Progress / Planned
 
-* Reminder workflows
+* Testing
 * Deployment
 
 ## Screenshots
@@ -84,7 +85,7 @@ Current progress:
 * [x] Task management
 * [x] Dashboard interview/task widgets
 * [x] Analytics
-* [ ] Reminder system
+* [ ] Testing
 * [ ] Deployment
 
 ## Database Schema
@@ -309,7 +310,7 @@ This project helped me practice:
 * [x] Add task completion workflow
 * [x] Add upcoming interviews to dashboard
 * [x] Add due tasks to dashboard
-* [ ] Add reminder workflows
+* [ ] Test the application, both manually and with automated tests
 * [ ] Deploy application
 
 ## Future Improvements
