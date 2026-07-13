@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUserId } from "@/lib/current-user";
+import {parseInterviewStage, parseOptionalHttpUrl} from "@/lib/actions/parsers";
 
 function parseScheduledAt(value: FormDataEntryValue | null) {
     if (typeof value !== "string" || value === "") {
@@ -18,17 +19,12 @@ function parseScheduledAt(value: FormDataEntryValue | null) {
     return scheduledAt;
 }
 
+
+
 export async function createInterview(formData: FormData){
     const userId = await requireUserId();
     const applicationId = formData.get("application_id") as string;
-    const stage = formData.get("stage") as
-        | "RECRUITER_SCREEN"
-        | "HIRING_MANAGER"
-        | "TECHNICAL"
-        | "BEHAVIOURAL"
-        | "SYSTEM_DESIGN"
-    | "FINAL"
-    | "OTHER";
+    const stage = parseInterviewStage(formData.get("stage") as string);
     const scheduledAt = parseScheduledAt(formData.get("scheduledAt"));
     const durationMinutesValue = formData.get("durationMinutes");
     const durationMinutes =
@@ -37,7 +33,7 @@ export async function createInterview(formData: FormData){
             : null;
     const format = formData.get("format") as string;
     const location = formData.get("location") as string;
-    const url = formData.get("url") as string;
+    const url = parseOptionalHttpUrl(formData.get("url"), "Meeting URL:");
     const notes = formData.get("notes") as string;
 
     if (stage == null || scheduledAt == null) {
@@ -90,14 +86,7 @@ export async function updateInterview(formData: FormData){
     const userId = await requireUserId();
     const id = formData.get("id") as string;
     const applicationId = formData.get("application_id") as string;
-    const stage = formData.get("stage") as
-        | "RECRUITER_SCREEN"
-        | "HIRING_MANAGER"
-        | "TECHNICAL"
-        | "BEHAVIOURAL"
-        | "SYSTEM_DESIGN"
-        | "FINAL"
-        | "OTHER";
+    const stage = parseInterviewStage(formData.get("stage") as string);
     const scheduledAt = parseScheduledAt(formData.get("scheduledAt"));
     const durationMinutesValue = formData.get("durationMinutes");
     const durationMinutes =
@@ -106,7 +95,7 @@ export async function updateInterview(formData: FormData){
             : null;
     const format = formData.get("format") as string;
     const location = formData.get("location") as string;
-    const url = formData.get("url") as string;
+    const url = parseOptionalHttpUrl(formData.get("url"), "Meeting URL:");
     const notes = formData.get("notes") as string;
 
     if (!id || !applicationId) {

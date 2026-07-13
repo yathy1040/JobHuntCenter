@@ -3,6 +3,8 @@ import { requireUserId } from "@/lib/current-user";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { parseOptionalDate, parseRequiredString} from "@/lib/actions/parsers";
+
 
 export async function createTask(formData: FormData) {
     const userId = await requireUserId();
@@ -12,9 +14,9 @@ export async function createTask(formData: FormData) {
         typeof applicationIdValue === "string" && applicationIdValue.length > 0
             ? applicationIdValue
             : null;
-    const title = formData.get("title") as string;
+    const title = parseRequiredString(formData.get("title"), "Title");
     const description = formData.get("description") as string;
-    const dueAt = formData.get("dueAt") as string;
+    const dueAt = parseOptionalDate(formData.get("dueAt"), "Due At");
 
     if (title == null) {
         throw new Error(`Stage and schedule time required`);
@@ -39,7 +41,7 @@ export async function createTask(formData: FormData) {
                     applicationId,
                     title,
                     description: description || null,
-                    dueAt: dueAt ? new Date(dueAt) : null
+                    dueAt: dueAt || null
 
                 }
             })
@@ -53,7 +55,7 @@ export async function createTask(formData: FormData) {
                 applicationId,
                 title,
                 description: description || null,
-                dueAt: dueAt ? new Date(dueAt) : null
+                dueAt: dueAt || null
 
             }
         })

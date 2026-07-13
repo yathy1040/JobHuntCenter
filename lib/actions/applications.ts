@@ -3,19 +3,16 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUserId } from "@/lib/current-user";
+import {parseApplicationStatus, parseOptionalDate, parseOptionalHttpUrl, parseRequiredString} from "@/lib/actions/parsers";
+
 
 export async function createApplication(formData: FormData){
     const userId = await requireUserId();
-    const company = formData.get("company") as string;
-    const role = formData.get("role") as string;
-    const status = formData.get("status") as
-    | "WISHLIST"
-    | "APPLIED"
-    | "INTERVIEW"
-    | "OFFER"
-    | "REJECTED";
-    const dateApplied = formData.get("dateApplied") as string;
-    const url = formData.get("url") as string;
+    const company = parseRequiredString(formData.get("company"), "Company");
+    const role = parseRequiredString(formData.get("role"), "Role");
+    const status = parseApplicationStatus(formData.get("status"));
+    const dateApplied = parseOptionalDate(formData.get("dateApplied"), "Date Applied");
+    const url = parseOptionalHttpUrl(formData.get("url"), "URL");
     const nextAction = formData.get("nextAction") as string;
     const notes = formData.get("notes") as string;
 
@@ -25,7 +22,13 @@ export async function createApplication(formData: FormData){
     if (!status) {
         throw new Error(`Status name required`);
     }
-    const comp = await prisma.company.create({data: {name: company, userId}});
+    let comp = await prisma.company.findFirst({
+        where: { name: company, userId },
+        orderBy: { id: "desc" },
+    });
+    if (!comp){
+        comp = await prisma.company.create({data: {name: company, userId}});
+    }
 
     await prisma.application.create({
         data: {
@@ -34,7 +37,7 @@ export async function createApplication(formData: FormData){
             role,
             status,
             jobUrl: url || null,
-            dateApplied: dateApplied ? new Date(dateApplied) : null,
+            dateApplied: dateApplied || null,
             nextAction: nextAction || null,
             notes: notes || null,
 
@@ -49,16 +52,11 @@ export async function createApplication(formData: FormData){
 export async function updateApplication(formData: FormData){
     const userId = await requireUserId();
     const id = formData.get("id") as string;
-    const company = formData.get("company") as string;
-    const role = formData.get("role") as string;
-    const status = formData.get("status") as
-        | "WISHLIST"
-        | "APPLIED"
-        | "INTERVIEW"
-        | "OFFER"
-        | "REJECTED";
-    const dateApplied = formData.get("dateApplied") as string;
-    const url = formData.get("url") as string;
+    const company = parseRequiredString(formData.get("company"), "Company");
+    const role = parseRequiredString(formData.get("role"), "Role");
+    const status = parseApplicationStatus(formData.get("status"));
+    const dateApplied = parseOptionalDate(formData.get("dateApplied"), "Date Applied");
+    const url = parseOptionalHttpUrl(formData.get("url"), "URL");
     const nextAction = formData.get("nextAction") as string;
     const notes = formData.get("notes") as string;
 
