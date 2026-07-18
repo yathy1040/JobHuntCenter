@@ -3,6 +3,7 @@
 Job Hunt Command Center is a full-stack job search workspace for tracking applications, companies, interviews, tasks, and follow-ups from one dashboard.
 
 Live Demo: https://job-hunt-center.vercel.app/
+
 Repository: https://github.com/yathy1040/JobHuntCenter
 
 ## Features
