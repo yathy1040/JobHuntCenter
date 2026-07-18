@@ -2,7 +2,6 @@ import {describe, expect, it, vi} from "vitest";
 import userEvent from "@testing-library/user-event";
 import {render, screen} from "@testing-library/react";
 import TasksForm from "@/components/tasks/task-form";
-import InterviewForm from "@/components/interviews/interview-form";
 
 describe("TaskForm", () => {
     it("renders create form fields", async () => {

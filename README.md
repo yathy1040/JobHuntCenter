@@ -139,9 +139,9 @@ npm install
 
 ### 3. Set up environment variables
 
-Create a `.env` file in the project root.
+Create a `.env.local` file in the project root.
 
-Copy `.env.example` to `.env`, then replace the placeholder values with your own local environment values.
+Copy `.env.example` to `.env.local`, then replace the placeholder values with your own local environment values.
 
 ### 4. Start PostgreSQL with Docker
 
@@ -154,19 +154,19 @@ docker compose up -d
 ### 5. Run Prisma migrations
 
 ```bash
-npx prisma migrate dev
+.\node_modules\.bin\prisma.cmd migrate dev
 ```
 
 ### 6. Generate Prisma Client
 
 ```bash
-npx prisma generate
+npm run prisma:generate
 ```
 
 ### 7. Seed the database
 
 ```bash
-npx prisma db seed
+.\node_modules\.bin\prisma.cmd db seed
 ```
 
 ### 8. Start the development server
@@ -204,25 +204,25 @@ docker compose stop
 Open Prisma Studio:
 
 ```bash
-npx prisma studio
+.\node_modules\.bin\prisma.cmd studio
 ```
 
 Run migrations:
 
 ```bash
-npx prisma migrate dev
+.\node_modules\.bin\prisma.cmd migrate dev
 ```
 
 Seed the database:
 
 ```bash
-npx prisma db seed
+.\node_modules\.bin\prisma.cmd db seed
 ```
 
 Generate secret authentication code:
 
 ```bash
-npx auth secret
+node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
 ```
 
 ## Environment Variables
