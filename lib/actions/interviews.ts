@@ -4,48 +4,18 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUserId } from "@/lib/current-user";
 import {parseInterviewStage, parseOptionalHttpUrl} from "@/lib/actions/parsers";
-
-function parseScheduledAt(value: FormDataEntryValue | null) {
-    if (typeof value !== "string" || value === "") {
-        throw new Error(`Stage and schedule time required`);
-    }
-
-    const scheduledAt = new Date(value);
-
-    if (Number.isNaN(scheduledAt.getTime())) {
-        throw new Error(`Schedule time must be a valid date`);
-    }
-
-    return scheduledAt;
-}
+import {parseInterviewData, parseScheduledAt} from "@/lib/actions/interview-data";
 
 
 
 export async function createInterview(formData: FormData){
     const userId = await requireUserId();
-    const applicationId = formData.get("application_id") as string;
-    const stage = parseInterviewStage(formData.get("stage") as string);
-    const scheduledAt = parseScheduledAt(formData.get("scheduledAt"));
-    const durationMinutesValue = formData.get("durationMinutes");
-    const durationMinutes =
-        typeof durationMinutesValue === "string" && durationMinutesValue !== ""
-            ? Number(durationMinutesValue)
-            : null;
-    const format = formData.get("format") as string;
-    const location = formData.get("location") as string;
-    const url = parseOptionalHttpUrl(formData.get("url"), "Meeting URL:");
-    const notes = formData.get("notes") as string;
+    const data = parseInterviewData(formData);
 
-    if (stage == null || scheduledAt == null) {
-        throw new Error(`Stage and schedule time required`);
-    }
-    if (durationMinutes !== null && !Number.isFinite(durationMinutes)) {
-        throw new Error(`Duration must be a valid number`);
-    }
 
     const application = await prisma.application.findFirst({
         where: {
-            id: applicationId,
+            id: data.applicationId,
             userId,
         },
         select: {
@@ -60,14 +30,14 @@ export async function createInterview(formData: FormData){
     await prisma.interview.create({
         data: {
             userId,
-            applicationId,
-            stage,
-            scheduledAt,
-            durationMinutes: durationMinutes || null,
-            format: format || null,
-            location: location || null,
-            meetingUrl: url || null,
-            notes: notes || null
+            applicationId: data.applicationId,
+            stage: data.stage,
+            scheduledAt: data.scheduledAt,
+            durationMinutes: data.durationMinutes || null,
+            format: data.format || null,
+            location: data.location || null,
+            meetingUrl: data.url || null,
+            notes: data.notes || null
 
         }
     })
@@ -76,9 +46,9 @@ export async function createInterview(formData: FormData){
 
     revalidatePath("/dashboard")
     revalidatePath("/applications")
-    revalidatePath(`/applications/${applicationId}`)
+    revalidatePath(`/applications/${data.applicationId}`)
     revalidatePath("/interviews")
-    redirect(`/applications/${applicationId}`)
+    redirect(`/applications/${data.applicationId}`)
 
 }
 
@@ -134,4 +104,3 @@ export async function updateInterview(formData: FormData){
     redirect(`/interviews`)
 
 }
-
