@@ -37,7 +37,7 @@ export default function CompaniesTable({
                         <th className="px-5 py-4 font-bold">Industry</th>
                         <th className="px-5 py-4 font-bold">Location</th>
                         <th className="px-5 py-4 font-bold">Applications</th>
-                        <th className="px-5 py-4 font-bold">Profile</th>
+                        <th className="px-5 py-4 font-bold">Actions</th>
                     </tr>
                     </thead>
 
@@ -72,12 +72,20 @@ export default function CompaniesTable({
                                 </span>
                             </td>
                             <td className="px-5 py-5">
-                                <Link
-                                    className="inline-flex rounded-full bg-zinc-950 px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-teal-700"
-                                    href={`/companies/${company.id}`}
-                                >
-                                    View
-                                </Link>
+                                <div className="flex flex-wrap gap-2">
+                                    <Link
+                                        className="inline-flex rounded-full bg-zinc-950 px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-teal-700"
+                                        href={`/companies/${company.id}`}
+                                    >
+                                        View
+                                    </Link>
+                                    <Link
+                                        className="inline-flex rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-bold text-zinc-700 transition hover:-translate-y-0.5 hover:border-teal-200 hover:text-teal-700"
+                                        href={`/companies/${company.id}/edit`}
+                                    >
+                                        Edit
+                                    </Link>
+                                </div>
                             </td>
                         </tr>
                     ))}
@@ -87,10 +95,9 @@ export default function CompaniesTable({
 
                     <div className="grid gap-3 p-4 md:hidden">
                         {companies.map((company) => (
-                            <Link
+                            <article
                                 key={company.id}
                                 className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-teal-200 hover:bg-teal-50/40"
-                                href={`/companies/${company.id}`}
                             >
                                 <div className="flex items-start justify-between gap-4">
                                     <div>
@@ -107,7 +114,21 @@ export default function CompaniesTable({
                                     <p>{company.location ?? "No location recorded"}</p>
                                     <p>{company.website ?? "No website recorded"}</p>
                                 </div>
-                            </Link>
+                                <div className="mt-4 flex flex-wrap gap-2">
+                                    <Link
+                                        href={`/companies/${company.id}`}
+                                        className="inline-flex rounded-full bg-zinc-950 px-4 py-2 text-sm font-bold text-white"
+                                    >
+                                        View
+                                    </Link>
+                                    <Link
+                                        href={`/companies/${company.id}/edit`}
+                                        className="inline-flex rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-bold text-zinc-700"
+                                    >
+                                        Edit
+                                    </Link>
+                                </div>
+                            </article>
                         ))}
                     </div>
                 </>

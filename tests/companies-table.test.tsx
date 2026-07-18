@@ -19,7 +19,7 @@ const companies: Company[] = [
 ];
 
 describe("CompaniesTable", () => {
-    it("renders company data, fallbacks, counts, and profile links", () => {
+    it("renders company data, fallbacks, counts, profile links, and edit links", () => {
         render(<CompaniesTable companies={companies} />);
 
         expect(screen.getByText("2 total")).toBeInTheDocument();
@@ -34,6 +34,10 @@ describe("CompaniesTable", () => {
             .toHaveAttribute("href", "/companies/company_1");
         expect(screen.getAllByRole("link", { name: /view/i })[1])
             .toHaveAttribute("href", "/companies/company_2");
+        expect(screen.getAllByRole("link", { name: /edit/i })[0])
+            .toHaveAttribute("href", "/companies/company_1/edit");
+        expect(screen.getAllByRole("link", { name: /edit/i })[1])
+            .toHaveAttribute("href", "/companies/company_2/edit");
     });
 
     it("renders the empty state", () => {

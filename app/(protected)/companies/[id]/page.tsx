@@ -80,12 +80,20 @@ export default async function CompanyDetailPage({
 
                 <main className="min-w-0 flex-1 p-6 lg:p-8">
                     <div className="mx-auto max-w-6xl space-y-8">
-                        <Link
-                            className="inline-flex items-center rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-700"
-                            href="/companies"
-                        >
-                            Back to companies
-                        </Link>
+                        <div className="flex flex-wrap gap-3">
+                            <Link
+                                className="inline-flex items-center rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-sm font-semibold text-zinc-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-700"
+                                href="/companies"
+                            >
+                                Back to companies
+                            </Link>
+                            <Link
+                                className="inline-flex items-center rounded-full bg-zinc-950 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-blue-700"
+                                href={`/companies/${company.id}/edit`}
+                            >
+                                Edit company
+                            </Link>
+                        </div>
 
                         <section className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
                             <div className="relative bg-[linear-gradient(135deg,_#0f172a_0%,_#1d4ed8_58%,_#38bdf8_100%)] p-8 text-white">

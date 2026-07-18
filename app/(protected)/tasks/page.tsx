@@ -1,4 +1,5 @@
 
+import Link from "next/link";
 import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/sidebar";
 import TaskList from "@/components/tasks/task-list";
@@ -76,16 +77,25 @@ export default async function Tasks() {
                                 <div className="absolute inset-0 -z-10 bg-[linear-gradient(135deg,rgba(15,23,42,0.96)_0%,rgba(20,83,45,0.88)_52%,rgba(13,148,136,0.72)_100%)]" />
                                 <div className="absolute -right-16 top-10 -z-10 h-48 w-48 rounded-full border border-white/15 bg-white/10 blur-sm" />
 
-                                <div className="max-w-3xl text-white">
-                                    <p className="text-sm font-bold uppercase tracking-[0.28em] text-emerald-100">
-                                        Tasks
-                                    </p>
-                                    <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">
-                                        Keep all tasks in view.
-                                    </h1>
-                                    <p className="mt-4 max-w-2xl text-sm leading-6 text-emerald-50 sm:text-base">
-                                       See completed tasks and what to do next
-                                    </p>
+                                <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                                    <div className="max-w-3xl text-white">
+                                        <p className="text-sm font-bold uppercase tracking-[0.28em] text-emerald-100">
+                                            Tasks
+                                        </p>
+                                        <h1 className="mt-3 text-3xl font-black tracking-tight sm:text-5xl">
+                                            Keep all tasks in view.
+                                        </h1>
+                                        <p className="mt-4 max-w-2xl text-sm leading-6 text-emerald-50 sm:text-base">
+                                           See completed tasks and what to do next
+                                        </p>
+                                    </div>
+
+                                    <Link
+                                        href="/tasks/new"
+                                        className="inline-flex w-fit items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-bold text-zinc-950 shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-emerald-50"
+                                    >
+                                        Add Task
+                                    </Link>
                                 </div>
 
                                 <div className="mt-8 grid gap-3 sm:grid-cols-3">

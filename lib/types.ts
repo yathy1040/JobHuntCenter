@@ -53,6 +53,22 @@ export type Company = {
     count?: number;
 }
 
+export type CompanyFormValues = {
+    id: string;
+    name: string;
+    website: string;
+    industry: string;
+    location: string;
+    notes: string;
+};
+
+export type CompanyFormProps = {
+    mode: "edit";
+    initialData: CompanyFormValues;
+    submitLabel: string;
+    action: (formData: FormData) => Promise<void>;
+};
+
 export type Interview = {
     id: string;
     stage: string;
@@ -123,4 +139,3 @@ export type Metric= {
     title: string;
     value: number;
 };
-
