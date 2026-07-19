@@ -223,7 +223,7 @@ npm run test:e2e
 
 ## Deployment
 
-The application is deployed with a production PostgreSQL database. Update the `Live Demo` link at the top of this README with the deployed URL before sharing the project.
+The application is deployed with a production PostgreSQL database.
 
 Production deployments need the same environment variables listed above, configured with production-safe values.
 
