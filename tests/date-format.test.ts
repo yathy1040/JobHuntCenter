@@ -4,6 +4,7 @@ import {
     formatDateOnly,
     formatDateTimeInputValue,
     formatFriendlyDateTime,
+    parseDateTimeInputValue,
     startOfTodayUtc,
 } from "@/lib/date-format";
 
@@ -28,6 +29,21 @@ describe("date formatting", () => {
     it("formats datetime-local input values in the app time zone", () => {
         expect(formatDateTimeInputValue(new Date("2026-07-15T14:30:00Z")))
             .toBe("2026-07-15T10:30");
+    });
+
+    it("parses datetime-local input values as app time zone values", () => {
+        expect(parseDateTimeInputValue("2026-07-15T22:09").toISOString())
+            .toBe("2026-07-16T02:09:00.000Z");
+    });
+
+    it("round trips datetime-local values through UTC storage", () => {
+        const parsedDate = parseDateTimeInputValue("2026-07-15T22:09");
+
+        expect(formatDateTimeInputValue(parsedDate)).toBe("2026-07-15T22:09");
+    });
+
+    it("returns an invalid date for invalid datetime-local input values", () => {
+        expect(parseDateTimeInputValue("not-a-date").getTime()).toBeNaN();
     });
 
     it("returns the UTC start of the current day", () => {
