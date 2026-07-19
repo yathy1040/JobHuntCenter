@@ -37,13 +37,21 @@ describe("parseInterviewData valid form data", () => {
         expect(data).toEqual({
             applicationId: "app_1",
             stage: "TECHNICAL",
-            scheduledAt: new Date("2026-07-15T10:30"),
+            scheduledAt: new Date("2026-07-15T14:30:00.000Z"),
             durationMinutes: 60,
             format: "Video",
             location: "Zoom",
             url: "https://meet.example.com/abc",
             notes: "Prepare system design notes",
         });
+    });
+
+    it("parses the scheduled time as app-local time", () => {
+        const data = parseInterviewData(buildInterviewFormData({
+            scheduledAt: "2026-07-15T22:09",
+        }));
+
+        expect(data.scheduledAt.toISOString()).toBe("2026-07-16T02:09:00.000Z");
     });
 
     it("parses an empty duration as null", () => {

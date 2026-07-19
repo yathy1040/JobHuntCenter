@@ -1,11 +1,12 @@
 import {parseInterviewStage, parseOptionalHttpUrl} from "@/lib/actions/parsers";
+import { parseDateTimeInputValue } from "@/lib/date-format";
 
 export function parseScheduledAt(value: FormDataEntryValue | null) {
     if (typeof value !== "string" || value === "") {
         throw new Error(`Stage and schedule time required`);
     }
 
-    const scheduledAt = new Date(value);
+    const scheduledAt = parseDateTimeInputValue(value);
 
     if (Number.isNaN(scheduledAt.getTime())) {
         throw new Error(`Schedule time must be a valid date`);
