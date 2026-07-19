@@ -35,13 +35,21 @@ Repository: https://github.com/yathy1040/JobHuntCenter
 
 ## Screenshots
 
-Add screenshots to `public/screenshots/`, then reference them here:
-
-```md
+### Dashboard
 ![Dashboard](./public/screenshots/dashboard.png)
+
+### Applications
 ![Applications](./public/screenshots/applications.png)
+
+### Board View
 ![Board View](./public/screenshots/board.png)
-```
+
+### Tasks
+![Tasks](./public/screenshots/tasks.png)
+
+### Analytics
+![Analytics](./public/screenshots/analytics.png)
+
 
 ## Getting Started
 
