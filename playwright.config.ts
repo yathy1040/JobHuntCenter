@@ -3,11 +3,6 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
-  // Real pointer-drag gestures (board-status-update.spec.ts) depend on the
-  // browser's compositor doing hit-testing against current layout, which becomes
-  // unreliable when too many Chromium instances render concurrently. Capping
-  // workers keeps that contention low without materially slowing the suite.
-  workers: 4,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   reporter: "html",

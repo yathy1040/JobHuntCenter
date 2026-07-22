@@ -117,9 +117,9 @@ Use the narrowest relevant checks during implementation.
 Before considering a substantial task complete, attempt to run:
 
 * `npm run lint`
-* `npx tsc --noEmit`
-* `npm test`
-* `npx playwright test`
+* `npm run typecheck`
+* `npm run test:run`
+* `npm run test:e2e`
 * `npm run build`
 
 When running the full suite is impractical, run the affected checks and clearly state what was not run.

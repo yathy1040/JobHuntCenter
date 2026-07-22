@@ -6,7 +6,7 @@ import { requireUserId } from "@/lib/current-user";
 import { formatDateOnly } from "@/lib/date-format";
 import { applicationStatusToLabel } from "@/lib/application-status";
 
-export const statusColumns: Array<{
+const statusColumns: Array<{
     label: ApplicationStatusLabel;
     description: string;
     tone: string;
