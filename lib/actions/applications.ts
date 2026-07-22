@@ -4,6 +4,7 @@ import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
 import {requireUserId} from "@/lib/current-user";
 import {parseApplicationData} from "@/lib/actions/application-data";
+import {parseApplicationStatus} from "@/lib/actions/parsers";
 
 export async function createApplication(formData: FormData){
 
@@ -75,6 +76,25 @@ export async function updateApplication(formData: FormData){
     revalidatePath(`/applications/${id}`)
     redirect(`/applications/${id}`)
 
+}
+
+export async function updateApplicationStatus(id: string, status: string) {
+    const userId = await requireUserId();
+    const parsedStatus = parseApplicationStatus(status);
+
+    const result = await prisma.application.updateMany({
+        where: { id, userId },
+        data: { status: parsedStatus },
+    });
+
+    if (result.count === 0) {
+        throw new Error("Application not found");
+    }
+
+    revalidatePath("/dashboard");
+    revalidatePath("/applications");
+    revalidatePath("/applications/board");
+    revalidatePath(`/applications/${id}`);
 }
 
 export async function deleteApplication(id: string) {

@@ -1,5 +1,4 @@
 import PageHeader from "@/components/dashboard/page-header";
-import {ApplicationStatusLabel } from "@/lib/types";
 import ApplicationsTable from "@/components/dashboard/applications-table";
 import prisma from "@/lib/prisma";
 import { requireUserId } from "@/lib/current-user";
@@ -8,18 +7,7 @@ import {
     type ApplicationStatus as PrismaApplicationStatus,
 } from "@/app/generated/prisma/enums";
 import { formatDateOnly } from "@/lib/date-format";
-
-function formatStatus(status: PrismaApplicationStatus):ApplicationStatusLabel {
-    const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
-        WISHLIST: "Wishlist",
-        APPLIED: "Applied",
-        INTERVIEW: "Interview",
-        OFFER: "Offer",
-        REJECTED: "Rejected",
-    };
-
-    return statusMap[status];
-}
+import { applicationStatusToLabel } from "@/lib/application-status";
 
 function parseApplicationStatus(
     status: string | string[] | undefined,
@@ -69,7 +57,7 @@ export default async function Applications({ searchParams }: PageProps) {
             id: application.id,
             company: application.company.name,
             role: application.role,
-            status: formatStatus(application.status),
+            status: applicationStatusToLabel(application.status),
             dateApplied: application.dateApplied
                 ? formatDateOnly(application.dateApplied)
                 : "Not applied yet",
