@@ -3,23 +3,11 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import DeleteApplicationButton from "@/components/applications/delete-application-button";
 import ApplicationStatusBadge from "@/components/dashboard/application-status-badge";
-import type { ApplicationStatus as PrismaApplicationStatus } from "@/app/generated/prisma/enums";
-import type { ApplicationStatusLabel, Interview } from "@/lib/types";
+import type { Interview } from "@/lib/types";
 import { requireUserId } from "@/lib/current-user";
 import InterviewList from "@/components/interviews/interview-list";
 import { formatDateOnly } from "@/lib/date-format";
-
-function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
-    const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
-        WISHLIST: "Wishlist",
-        APPLIED: "Applied",
-        INTERVIEW: "Interview",
-        OFFER: "Offer",
-        REJECTED: "Rejected",
-    };
-
-    return statusMap[status];
-}
+import { applicationStatusToLabel } from "@/lib/application-status";
 
 function getExternalUrl(url: string) {
     return /^https?:\/\//i.test(url) ? url : `https://${url}`;
@@ -47,7 +35,7 @@ export default async function ApplicationDetailPage({
         notFound();
     }
 
-    const status = formatStatus(application.status);
+    const status = applicationStatusToLabel(application.status);
     const dateApplied = application.dateApplied
         ? formatDateOnly(application.dateApplied)
         : "Not applied yet";
@@ -112,7 +100,11 @@ export default async function ApplicationDetailPage({
                     >
                         Edit application
                     </Link>
-                    <DeleteApplicationButton id={application.id} />
+                    <DeleteApplicationButton
+                        id={application.id}
+                        role={application.role}
+                        company={application.company.name}
+                    />
                 </div>
             </div>
 

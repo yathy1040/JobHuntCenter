@@ -1,14 +1,12 @@
-import {
-    ApplicationStatus as PrismaApplicationStatus
-} from "@/app/generated/prisma/enums";
 import {ApplicationStatusLabel} from "@/lib/types";
 import prisma from "@/lib/prisma";
-import ApplicationBoardColumn from "@/components/applications/application-board-column";
+import ApplicationBoard from "@/components/applications/application-board";
 import Link from "next/link";
 import { requireUserId } from "@/lib/current-user";
 import { formatDateOnly } from "@/lib/date-format";
+import { applicationStatusToLabel } from "@/lib/application-status";
 
-const statusColumns: Array<{
+export const statusColumns: Array<{
     label: ApplicationStatusLabel;
     description: string;
     tone: string;
@@ -44,19 +42,6 @@ const statusColumns: Array<{
 export default async function ApplicationBoardPage() {
     const userId = await requireUserId();
 
-    function formatStatus(status: PrismaApplicationStatus):ApplicationStatusLabel {
-        const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
-            WISHLIST: "Wishlist",
-            APPLIED: "Applied",
-            INTERVIEW: "Interview",
-            OFFER: "Offer",
-            REJECTED: "Rejected",
-        };
-
-        return statusMap[status];
-    }
-
-
     const dbApplications = await prisma.application.findMany({
         where: {
             userId,
@@ -73,23 +58,18 @@ export default async function ApplicationBoardPage() {
         id: application.id,
         company: application.company.name,
         role: application.role,
-        status: formatStatus(application.status),
+        status: applicationStatusToLabel(application.status),
         dateApplied: application.dateApplied
             ? formatDateOnly(application.dateApplied)
             : "Not applied yet",
         nextAction: application.nextAction ?? "No next action",
     }));
 
-    const columns = statusColumns.map((column) => ({
-        ...column,
-        applications: applications.filter((application) => application.status === column.label),
-    }));
-
     const activeApplications = applications.filter(
         (application) => application.status !== "Rejected",
     ).length;
 
-    const interviews = columns.find((column) => column.label === "Interview")?.applications.length ?? 0;
+    const interviews = applications.filter((application) => application.status === "Interview").length;
 
 
     return (
@@ -138,17 +118,7 @@ export default async function ApplicationBoardPage() {
             </div>
 
             <div className="rounded-[2rem] border border-zinc-200/80 bg-white/70 p-3 shadow-xl shadow-zinc-200/60 backdrop-blur">
-                <div className="grid auto-cols-[minmax(17rem,1fr)] grid-flow-col gap-4 overflow-x-auto pb-2 xl:grid-flow-row xl:grid-cols-5 xl:overflow-visible">
-                    {columns.map((column) => (
-                        <ApplicationBoardColumn
-                            key={column.label}
-                            applications={column.applications}
-                            description={column.description}
-                            label={column.label}
-                            tone={column.tone}
-                        />
-                    ))}
-                </div>
+                <ApplicationBoard applications={applications} statusColumns={statusColumns} />
             </div>
         </section>
     )

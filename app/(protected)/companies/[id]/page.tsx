@@ -5,22 +5,10 @@ import prisma from "@/lib/prisma";
 import ApplicationsTable from "@/components/dashboard/applications-table";
 import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/sidebar";
-import type { ApplicationStatus as PrismaApplicationStatus } from "@/app/generated/prisma/enums";
-import type { Application, ApplicationStatusLabel } from "@/lib/types";
+import type { Application } from "@/lib/types";
 import { requireUserId } from "@/lib/current-user";
 import { formatDateOnly } from "@/lib/date-format";
-
-function formatStatus(status: PrismaApplicationStatus): ApplicationStatusLabel {
-    const statusMap: Record<PrismaApplicationStatus, ApplicationStatusLabel> = {
-        WISHLIST: "Wishlist",
-        APPLIED: "Applied",
-        INTERVIEW: "Interview",
-        OFFER: "Offer",
-        REJECTED: "Rejected",
-    };
-
-    return statusMap[status];
-}
+import { applicationStatusToLabel } from "@/lib/application-status";
 
 function getExternalUrl(url: string) {
     return /^https?:\/\//i.test(url) ? url : `https://${url}`;
@@ -59,7 +47,7 @@ export default async function CompanyDetailPage({
         id: application.id,
         company: company.name,
         role: application.role,
-        status: formatStatus(application.status),
+        status: applicationStatusToLabel(application.status),
         dateApplied: application.dateApplied
             ? formatDateOnly(application.dateApplied)
             : "Not applied yet",
