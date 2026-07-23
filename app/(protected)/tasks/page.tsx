@@ -61,7 +61,7 @@ export default async function Tasks() {
         <div className="min-h-screen bg-[radial-gradient(circle_at_8%_10%,rgba(20,184,166,0.20),transparent_28%),radial-gradient(circle_at_88%_0%,rgba(251,146,60,0.18),transparent_26%),linear-gradient(180deg,#f8fafc_0%,#eef2f7_100%)] text-zinc-950">
             <Navbar />
 
-            <div className="flex w-full">
+            <div className="flex flex-col w-full md:flex-row">
                 <Sidebar />
 
                 <main className="min-w-0 flex-1 p-6 lg:p-8">

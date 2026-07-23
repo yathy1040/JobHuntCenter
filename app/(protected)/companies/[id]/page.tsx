@@ -64,7 +64,7 @@ export default async function CompanyDetailPage({
         <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_#bfdbfe,_transparent_28%),linear-gradient(180deg,_#fafafa_0%,_#f4f4f5_100%)] text-zinc-900">
             <Navbar />
 
-            <div className="flex w-full">
+            <div className="flex flex-col w-full md:flex-row">
                 <Sidebar />
 
                 <main className="min-w-0 flex-1 p-6 lg:p-8">
