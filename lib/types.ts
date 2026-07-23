@@ -71,6 +71,7 @@ export type CompanyFormProps = {
 
 export type Interview = {
     id: string;
+    applicationId: string;
     stage: string;
     scheduledAt: Date;
     durationMinutes?: number;

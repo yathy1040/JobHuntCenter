@@ -11,6 +11,15 @@ export function formatDateOnly(date: Date) {
     }).format(date);
 }
 
+export function formatDateInputValue(date: Date) {
+    return new Intl.DateTimeFormat("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        timeZone: "UTC",
+    }).format(date);
+}
+
 export function formatFriendlyDateTime(date: Date) {
     return new Intl.DateTimeFormat("en", {
         weekday: "short",

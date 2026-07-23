@@ -1,11 +1,16 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import InterviewList from "@/components/interviews/interview-list";
 import type { Interview } from "@/lib/types";
+
+vi.mock("@/lib/actions/interviews", () => ({
+    deleteInterview: vi.fn(),
+}));
 
 const interviews: Interview[] = [
     {
         id: "interview_1",
+        applicationId: "app_1",
         stage: "TECHNICAL",
         scheduledAt: new Date("2026-07-15T14:30:00Z"),
         durationMinutes: 60,
