@@ -1,24 +1,30 @@
 # Job Hunt Command Center
 
+![Tests](https://github.com/yathy1040/JobHuntCenter/actions/workflows/test.yml/badge.svg)
+
 Job Hunt Command Center is a full-stack job search workspace for tracking applications, companies, interviews, tasks, and follow-ups from one dashboard.
 
 Live Demo: https://job-hunt-center.vercel.app/
 
 Repository: https://github.com/yathy1040/JobHuntCenter
 
+Current release: **v1.1 - Reliability and Workflow Polish**. See [docs/ROADMAP.md](./docs/ROADMAP.md) for release history and what's planned next.
+
 ## Features
 
 * GitHub OAuth authentication with Auth.js
 * User-scoped job application tracking
 * Application create, read, update, and delete workflows
-* Company management with company detail pages
+* Company management with company detail pages, including delete (cascades to the company's applications and interviews, with a confirmation warning)
+* Interview scheduling and delete, with stage, format, location, meeting URL, duration, and notes
 * Application status tracking
 * Searchable and filterable applications table
-* Board/Kanban-style application view by status
-* Interview scheduling with stage, format, location, meeting URL, duration, and notes
-* Task management with due dates and completion tracking
+* Board/Kanban-style application view with drag-and-drop status updates, optimistic UI feedback, and a keyboard/screen-reader-friendly status control as a non-drag alternative
+* Task management with due dates, drag-and-drop completion toggling (same optimistic-update pattern as the application board), and a button-based non-drag alternative
 * Dashboard metrics for applications, upcoming interviews, and due tasks
 * Analytics dashboard
+* Custom error and 404 pages, inline server-error feedback on forms, and pending-submit indicators
+* Responsive, collapsible sidebar navigation with active-route indication
 * PostgreSQL data model with Prisma migrations and seed data
 
 ## Tech Stack
@@ -229,18 +235,22 @@ Production deployments need the same environment variables listed above, configu
 
 ## What I Learned
 
-This project strengthened full-stack Next.js skills across authenticated CRUD workflows, relational data modeling, Prisma migrations, reusable React components, form handling, dashboard design, and testing with Vitest and Playwright.
+This project strengthened full-stack Next.js skills across authenticated CRUD workflows, relational data modeling, Prisma migrations, reusable React components, form handling, dashboard design, and testing with Vitest and Playwright. The v1.1 release added hands-on experience with drag-and-drop interactions (`@dnd-kit`) built alongside genuine keyboard/screen-reader alternatives, React's optimistic-update APIs (`useOptimistic`, `useTransition`, `useActionState`), and diagnosing environment-specific E2E flakiness versus real product defects.
 
 ## Future Improvements
 
+* Add follow-up reminders and dashboard prioritization
+* Track application activity history
 * Add resume and cover letter version tracking
-* Add follow-up reminders and notifications
 * Add CSV export
-* Expand Playwright coverage for core authenticated workflows
+* Standardize success-message feedback for non-drag mutation flows (create/update/delete)
+* Add a skip-to-content link and post-navigation focus management
+
+See [docs/ROADMAP.md](./docs/ROADMAP.md) for the full prioritized roadmap.
 
 ## Resume Summary
 
-Job Hunt Command Center is a deployed full-stack job application tracking platform built with Next.js, TypeScript, PostgreSQL, Prisma, Tailwind CSS, Docker, and Auth.js. It includes GitHub OAuth authentication, user-scoped application tracking, company management, application CRUD workflows, board views, interview scheduling, task management, analytics, and automated tests with Vitest and Playwright.
+Job Hunt Command Center is a deployed full-stack job application tracking platform built with Next.js, TypeScript, PostgreSQL, Prisma, Tailwind CSS, Docker, and Auth.js. It includes GitHub OAuth authentication, user-scoped application tracking, company management, application CRUD workflows, a drag-and-drop Kanban board with optimistic UI updates and accessible alternatives, interview scheduling, task management with drag-and-drop completion tracking, analytics, and automated tests with Vitest and Playwright, enforced in CI alongside linting, type checking, and a production build check.
 
 ## License
 

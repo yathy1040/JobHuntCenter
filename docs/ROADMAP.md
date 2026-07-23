@@ -50,13 +50,15 @@ The purpose of version 1.0 was to establish a complete, deployed end-to-end prod
 
 ## Version 1.1 — Reliability and Workflow Polish
 
-Status: Next release
+Status: Released
 
 Primary objective:
 
 > Make the existing application more trustworthy, testable, and polished before adding another major feature area.
 
-### Priority 1: Expand Playwright coverage
+All five priorities below shipped across four pull requests: [#9](https://github.com/yathy1040/JobHuntCenter/pull/9) (Playwright coverage expansion + application board drag-and-drop), [#10](https://github.com/yathy1040/JobHuntCenter/pull/10) (task completion drag-and-drop), [#11](https://github.com/yathy1040/JobHuntCenter/pull/11) (CI production-build check), and [#12](https://github.com/yathy1040/JobHuntCenter/pull/12) (UX and accessibility pass).
+
+### Priority 1: Expand Playwright coverage (Shipped)
 
 Add reliable tests for the most important authenticated workflows.
 
@@ -84,7 +86,7 @@ Quality requirements:
 * Clean up created data.
 * Ensure failures reveal the broken user behaviour.
 
-### Priority 2: Board drag and drop
+### Priority 2: Board drag and drop (Shipped)
 
 Add drag-and-drop application status updates to the board view.
 
@@ -100,7 +102,9 @@ Expected behaviour:
 
 This feature should not be considered complete with mouse interaction alone.
 
-### Priority 3: Task drag and drop
+Delivered via `@dnd-kit` with optimistic updates and an `aria-live` status region; the status `<select>` on each card is the keyboard/non-drag alternative. An automated real-mouse-drag Playwright test was attempted but proved unreliable in this environment for reasons unrelated to the feature itself (see the comment in `tests/e2e/board-status-update.spec.ts`), so the shipped test coverage exercises the select-based path, which drives the same code as the drag gesture.
+
+### Priority 3: Task drag and drop (Shipped)
 
 Allow task cards to move between incomplete and complete states.
 
@@ -112,7 +116,9 @@ Expected behaviour:
 * The UI responds immediately and recovers from server errors.
 * Keyboard and non-drag alternatives remain available.
 
-### Priority 4: UX and accessibility pass
+Delivered using the same `@dnd-kit` + optimistic-update architecture as the application board; the existing "Mark complete"/"Mark incomplete" button is the non-drag alternative. As with the board, an automated real-mouse-drag Playwright test was attempted and dropped for the same environment-level flakiness (documented in `tests/e2e/complete-task.spec.ts`), with the button-driven test covering the same completion-toggle code path.
+
+### Priority 4: UX and accessibility pass (Shipped)
 
 Review all primary workflows for:
 
@@ -127,7 +133,9 @@ Review all primary workflows for:
 * Consistent date formatting
 * Clear success and failure feedback
 
-### Priority 5: CI confidence
+Delivered: an empty state on the dashboard applications table, custom `app/error.tsx` and `app/not-found.tsx` pages, a shared pending-submit indicator and inline server-error display on all four forms, visible required-field marks, delete actions for companies and interviews (previously missing entirely), a collapsible mobile sidebar drawer with active-route indication, and a shared date-input formatting helper. Not addressed in this pass, and still open: a skip-to-content link and explicit post-navigation focus management (see Technical Debt below).
+
+### Priority 5: CI confidence (Shipped)
 
 Ensure automated checks consistently cover:
 
@@ -139,18 +147,20 @@ Ensure automated checks consistently cover:
 
 The repository should make it obvious which checks are required before merging.
 
+Delivered: `.github/workflows/test.yml` now runs a production build alongside lint, typecheck, unit tests, and Playwright. Branch protection requiring that check before merging into `main` is a manual GitHub settings step still outstanding.
+
 ## Version 1.1 Definition of Done
 
 Version 1.1 is complete when:
 
-* Core authenticated workflows have meaningful Playwright coverage.
-* Drag-and-drop application status updates work reliably or are explicitly deferred.
-* Task completion behaviour preserves the `completedAt` invariant.
-* No known high-severity authorization issue remains.
-* Type checking, linting, unit tests, and production build pass.
-* The README reflects the shipped behaviour.
-* Screenshots or demo material reflect the current release.
-* A Git tag and release notes are created.
+* [x] Core authenticated workflows have meaningful Playwright coverage.
+* [x] Drag-and-drop application status updates work reliably or are explicitly deferred.
+* [x] Task completion behaviour preserves the `completedAt` invariant.
+* [x] No known high-severity authorization issue remains.
+* [x] Type checking, linting, unit tests, and production build pass.
+* [x] The README reflects the shipped behaviour.
+* [ ] Screenshots or demo material reflect the current release. (Existing screenshots predate the board/task drag-and-drop and UX pass; still need refreshing.)
+* [ ] A Git tag and release notes are created.
 
 ## Version 1.2 — Job Search Operations
 
@@ -382,11 +392,11 @@ These tasks may be scheduled alongside feature work.
 
 ### User experience
 
-* Review mobile responsiveness.
-* Improve confirmation and recovery for destructive actions.
-* Standardize success and error messages.
-* Improve empty states.
-* Review accessibility after drag-and-drop implementation.
+* Review mobile responsiveness. (Addressed in v1.1 for the sidebar; other layouts not individually re-audited.)
+* Improve confirmation and recovery for destructive actions. (Addressed in v1.1: companies and interviews previously had no delete action at all.)
+* Standardize success and error messages. (Partially addressed in v1.1 - forms now surface thrown server errors inline; a consistent success-toast pattern for non-drag mutation flows is still open.)
+* Improve empty states. (Addressed in v1.1 for the dashboard applications table.)
+* Review accessibility after drag-and-drop implementation. (Addressed in v1.1's UX and accessibility pass.)
 
 ### Documentation
 
@@ -429,12 +439,12 @@ A feature with high novelty but weak user value should generally lose to a small
 
 ## Recommended Immediate Sequence
 
-1. Expand Playwright coverage.
-2. Add application board drag and drop.
-3. Add task completion drag and drop.
-4. Complete an accessibility and UX pass.
-5. Strengthen CI.
-6. Tag and document version 1.1.
+1. ~~Expand Playwright coverage.~~ Done ([#9](https://github.com/yathy1040/JobHuntCenter/pull/9)).
+2. ~~Add application board drag and drop.~~ Done ([#9](https://github.com/yathy1040/JobHuntCenter/pull/9)).
+3. ~~Add task completion drag and drop.~~ Done ([#10](https://github.com/yathy1040/JobHuntCenter/pull/10)).
+4. ~~Complete an accessibility and UX pass.~~ Done ([#12](https://github.com/yathy1040/JobHuntCenter/pull/12)).
+5. ~~Strengthen CI.~~ Done ([#11](https://github.com/yathy1040/JobHuntCenter/pull/11)).
+6. Tag and document version 1.1. README and this roadmap are updated; refreshed screenshots, a Git tag, and release notes are still outstanding.
 7. Reassess the roadmap before beginning version 1.2.
 
 The sequence is intentionally conservative. The application already has broad feature coverage; the next release should prove that those features work reliably rather than simply adding more dashboard furniture.
