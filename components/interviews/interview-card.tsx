@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { Interview } from "@/lib/types";
 import { formatFriendlyDateTime } from "@/lib/date-format";
+import DeleteInterviewButton from "@/components/interviews/delete-interview-button";
 
 type InterviewCardProps = {
     interview: Interview;
@@ -70,6 +71,11 @@ export default function InterviewCard({ interview }: InterviewCardProps) {
                         No meeting URL
                     </span>
                 )}
+                <DeleteInterviewButton
+                    id={interview.id}
+                    applicationId={interview.applicationId}
+                    label={`${formatStage(interview.stage)} - ${formatFriendlyDateTime(interview.scheduledAt)}`}
+                />
             </div>
         </article>
     );

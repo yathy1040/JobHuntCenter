@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import ApplicationsTable from "@/components/dashboard/applications-table";
 import Navbar from "@/components/layout/navbar";
 import Sidebar from "@/components/layout/sidebar";
+import DeleteCompanyButton from "@/components/companies/delete-company-button";
 import type { Application } from "@/lib/types";
 import { requireUserId } from "@/lib/current-user";
 import { formatDateOnly } from "@/lib/date-format";
@@ -63,7 +64,7 @@ export default async function CompanyDetailPage({
         <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_#bfdbfe,_transparent_28%),linear-gradient(180deg,_#fafafa_0%,_#f4f4f5_100%)] text-zinc-900">
             <Navbar />
 
-            <div className="flex w-full">
+            <div className="flex flex-col w-full md:flex-row">
                 <Sidebar />
 
                 <main className="min-w-0 flex-1 p-6 lg:p-8">
@@ -81,6 +82,11 @@ export default async function CompanyDetailPage({
                             >
                                 Edit company
                             </Link>
+                            <DeleteCompanyButton
+                                id={company.id}
+                                name={company.name}
+                                applicationCount={company.applications.length}
+                            />
                         </div>
 
                         <section className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">

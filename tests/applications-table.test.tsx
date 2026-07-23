@@ -41,10 +41,12 @@ describe("ApplicationsTable", () => {
             .toHaveAttribute("href", "/applications/app_2");
     });
 
-    it("renders an empty table body when no applications are provided", () => {
+    it("renders an empty state when no applications are provided", () => {
         render(<ApplicationsTable applications={[]} />);
 
         expect(screen.getByRole("heading", { name: /recent applications/i })).toBeInTheDocument();
+        expect(screen.getByText("No applications yet")).toBeInTheDocument();
+        expect(screen.queryByRole("table")).not.toBeInTheDocument();
         expect(screen.queryByRole("link", { name: /view/i })).not.toBeInTheDocument();
     });
 });

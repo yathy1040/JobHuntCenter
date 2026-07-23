@@ -134,7 +134,7 @@ export default async function Dashboard() {
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
       <Navbar />
 
-      <div className="flex w-full">
+      <div className="flex flex-col w-full md:flex-row">
         <Sidebar />
 
         <main className="min-w-0 flex-1 p-6 lg:p-8">

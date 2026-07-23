@@ -66,6 +66,7 @@ export default async function InterviewsPage() {
                     {dbInterviews.map((interview) => {
                         const displayInterview: Interview = {
                             id: interview.id,
+                            applicationId: interview.application.id,
                             stage: interview.stage,
                             scheduledAt: interview.scheduledAt,
                             format: interview.format ?? "Format not set",

@@ -5,6 +5,7 @@ import ApplicationForm from "@/components/applications/application-form";
 import {updateApplication} from "@/lib/actions/applications";
 import {ApplicationFormValues} from "@/lib/types";
 import { requireUserId } from "@/lib/current-user";
+import { formatDateInputValue } from "@/lib/date-format";
 
 export default async function ApplicationDetailPage({
                                                         params,
@@ -35,7 +36,7 @@ export default async function ApplicationDetailPage({
         status: application.status,
         jobUrl: application.jobUrl?? "",
         dateApplied: application.dateApplied
-            ? application.dateApplied.toISOString().split("T")[0]
+            ? formatDateInputValue(application.dateApplied)
             : "",
         nextAction: application.nextAction ?? "",
         notes: application.notes ?? "",

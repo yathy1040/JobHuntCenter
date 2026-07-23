@@ -31,3 +31,20 @@ export async function updateCompany(formData: FormData) {
     revalidatePath(`/companies/${id}`);
     redirect(`/companies/${id}`);
 }
+
+export async function deleteCompany(id: string) {
+    const userId = await requireUserId();
+
+    await prisma.company.deleteMany({
+        where: {
+            id,
+            userId,
+        },
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/applications");
+    revalidatePath("/companies");
+
+    redirect("/companies");
+}

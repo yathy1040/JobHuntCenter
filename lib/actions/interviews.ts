@@ -104,3 +104,18 @@ export async function updateInterview(formData: FormData){
     redirect(`/interviews`)
 
 }
+
+export async function deleteInterview(id: string, applicationId: string) {
+    const userId = await requireUserId();
+
+    await prisma.interview.deleteMany({
+        where: {
+            id,
+            userId,
+        },
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath(`/applications/${applicationId}`);
+    revalidatePath("/interviews");
+}
