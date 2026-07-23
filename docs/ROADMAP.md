@@ -164,22 +164,43 @@ Version 1.1 is complete when:
 
 ## Version 1.2 — Job Search Operations
 
-Status: Candidate release
+Status: Next release
 
 Primary objective:
 
 > Improve the application's ability to tell the user what to do next.
 
-Potential features:
+### Reassessment before starting (2026-07-23)
 
-### Follow-up reminders
+Before beginning feature work, the roadmap was checked against the current codebase (per Recommended Immediate Sequence step 7, below). Findings:
 
-* Add reminder dates to applications or tasks.
-* Surface overdue and upcoming follow-ups.
-* Provide dashboard prioritization.
+* **A stated v1.1 goal slipped silently.** Priority 1 listed "Users cannot access or mutate another user's records" as a target Playwright scenario, and the v1.1 Definition of Done claimed "No known high-severity authorization issue remains." The code is consistent - every mutation checked this session scopes by `userId` (`findFirst`/`updateMany`/`deleteMany` with `{id, userId}`) - but `tests/e2e/auth-boundary.spec.ts` only tests unauthenticated redirects, never a signed-in user attempting to reach another user's record. The claim rests on code review, not a test. Added as Priority 0 below, ahead of any 1.2 feature work, per this roadmap's own "reliability before feature count" principle.
+* **"Improved dashboard prioritization" was listed as fully untouched but is already ~70% built.** The dashboard already has an "Upcoming Interviews" section, a "Tasks Due Soon" section (overdue or due within 7 days, driven by `Task.dueAt`), and a "Follow-Ups Due" count. Only "applications with no recent activity" and a real actionable "applications requiring a next action" list (today it's just a count) are genuinely missing. Re-scoped to just those two below.
+* **"Follow-up reminders" already has half its foundation.** `Task.dueAt` already drives real due-date logic end to end. The actual gap is that `Application` has no structured reminder date at all - `nextAction` is free text with no date attached, so it can't be surfaced as "overdue" or "due soon" the way tasks can.
+* **"Application activity history" and "Saved filters" are fully greenfield** - no schema, model, or UI groundwork exists for either. Confirmed via `prisma/schema.prisma` (no activity/event model) and the applications list (ad hoc `status`/`search` query params, nothing persisted as a named view).
+
+Re-prioritized for 1.2, lowest-effort/already-partially-shipped first:
+
+### Priority 0: Authorization test hardening
+
+Add Playwright coverage proving a signed-in user cannot view, edit, or delete another user's application, company, interview, or task by requesting that record's ID directly (e.g. `/applications/{other-user's-id}` returns 404, not the record). This isn't new product work - it closes the gap identified above before any 1.2 feature ships on top of an unverified assumption.
+
+### Priority 1: Finish dashboard prioritization
+
+Already shipped: Upcoming Interviews, Tasks Due Soon, Follow-Ups Due count.
+
+Remaining:
+
+* Applications with no recent activity.
+* Applications requiring a next action, as a real list a user can act on - not just a count.
+
+### Priority 2: Follow-up reminders
+
+* Add a structured reminder/follow-up date to `Application` (today only `Task.dueAt` has one).
+* Surface overdue and upcoming application follow-ups the same way tasks already are.
 * Avoid adding external notifications until in-app reminder logic is reliable.
 
-### Application activity history
+### Priority 3: Application activity history
 
 Track important events such as:
 
@@ -189,9 +210,9 @@ Track important events such as:
 * Task completed
 * Notes updated
 
-This would support better analytics and make application timelines easier to understand.
+This would support better analytics and make application timelines easier to understand. Larger lift than the other three - needs a new model and event-recording added to every relevant mutation.
 
-### Saved filters
+### Priority 4: Saved filters
 
 Allow users to save useful views such as:
 
@@ -201,16 +222,6 @@ Allow users to save useful views such as:
 * Follow-up overdue
 * Recently rejected
 * Offers
-
-### Improved dashboard prioritization
-
-Potential sections:
-
-* Tasks due today
-* Follow-ups due soon
-* Upcoming interviews
-* Applications with no recent activity
-* Applications requiring a next action
 
 ## Version 1.3 — Documents and Export
 
@@ -444,8 +455,10 @@ A feature with high novelty but weak user value should generally lose to a small
 3. ~~Add task completion drag and drop.~~ Done ([#10](https://github.com/yathy1040/JobHuntCenter/pull/10)).
 4. ~~Complete an accessibility and UX pass.~~ Done ([#12](https://github.com/yathy1040/JobHuntCenter/pull/12)).
 5. ~~Strengthen CI.~~ Done ([#11](https://github.com/yathy1040/JobHuntCenter/pull/11)).
-6. Tag and document version 1.1. README and this roadmap are updated; refreshed screenshots, a Git tag, and release notes are still outstanding.
-7. Reassess the roadmap before beginning version 1.2.
+6. ~~Tag and document version 1.1.~~ Done - README and this roadmap updated ([#13](https://github.com/yathy1040/JobHuntCenter/pull/13)), screenshots refreshed ([#14](https://github.com/yathy1040/JobHuntCenter/pull/14), [#15](https://github.com/yathy1040/JobHuntCenter/pull/15)), tagged `v1.1.0`.
+7. ~~Reassess the roadmap before beginning version 1.2.~~ Done - see "Reassessment before starting" under Version 1.2, above.
+
+Version 1.2 now starts with Priority 0 (authorization test hardening) before any of its feature priorities.
 
 The sequence is intentionally conservative. The application already has broad feature coverage; the next release should prove that those features work reliably rather than simply adding more dashboard furniture.
 
