@@ -32,8 +32,8 @@ vi.mock("@/components/layout/sidebar", () => ({
     default: () => <aside>Sidebar</aside>,
 }));
 
-vi.mock("@/components/tasks/task-list", () => ({
-    default: ({ label }: { label: string }) => <section>{label}</section>,
+vi.mock("@/components/tasks/task-board", () => ({
+    default: () => <section>Task board</section>,
 }));
 
 describe("Tasks page", () => {
