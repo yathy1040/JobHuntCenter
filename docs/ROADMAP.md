@@ -181,9 +181,11 @@ Before beginning feature work, the roadmap was checked against the current codeb
 
 Re-prioritized for 1.2, lowest-effort/already-partially-shipped first:
 
-### Priority 0: Authorization test hardening
+### Priority 0: Authorization test hardening (Shipped in v1.1.1)
 
 Add Playwright coverage proving a signed-in user cannot view, edit, or delete another user's application, company, interview, or task by requesting that record's ID directly (e.g. `/applications/{other-user's-id}` returns 404, not the record). This isn't new product work - it closes the gap identified above before any 1.2 feature ships on top of an unverified assumption.
+
+Delivered: `tests/e2e/cross-user-authorization.spec.ts` proves a second, independently-authenticated user gets a 404 on another user's application, application-edit, company, company-edit, and interview-edit pages, and that the other user's own applications list never surfaces it either. `tests/authorization.test.ts` unit-tests every mutation action (`updateApplication`, `updateApplicationStatus`, `deleteApplication`, `updateCompany`, `deleteCompany`, `createInterview`, `updateInterview`, `deleteInterview`, `createTask`, `deleteTask`) to prove each one's Prisma `where` clause is scoped to the authenticated user, not the record's actual owner.
 
 ### Priority 1: Finish dashboard prioritization
 
