@@ -32,11 +32,16 @@ test("a signed-in user cannot view or edit another user's application, company, 
     await page.getByRole("button", { name: "Create Interview" }).click();
     await page.waitForURL((url) => url.pathname === applicationHref);
 
+    // Scoped to the interview card (an <article>) - the page also has an
+    // "Edit application" link before the interview section, which an
+    // unscoped `name: "Edit"` substring match would incorrectly capture.
     const interviewEditHref = await page
+        .locator("article")
         .getByRole("link", { name: "Edit" })
         .first()
         .getAttribute("href");
-    expect(interviewEditHref).toBeTruthy();
+    expect(interviewEditHref).toContain("/interviews/");
+    expect(interviewEditHref).toContain("/edit");
 
     const other = await createIsolatedUserSession(browser);
 
